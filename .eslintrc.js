@@ -7,23 +7,23 @@ module.exports = {
   },
 
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: "babel-eslint"
   },
 
-  plugins: ['prettier'],
+  plugins: ["prettier"],
 
   // add your custom rules here
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off"
   },
 
   extends: [
-    'prettier',
-    'plugin:prettier/recommended',
-    'plugin:vue/recommended',
-    'plugin:vue/essential',
-    'eslint:recommended',
-    '@vue/prettier'
+    "prettier",
+    "plugin:prettier/recommended",
+    "plugin:vue/recommended",
+    "plugin:vue/essential",
+    "eslint:recommended",
+    "@vue/prettier"
   ]
 }

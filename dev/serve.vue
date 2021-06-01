@@ -17,6 +17,7 @@ export default Vue.extend({
       fio: {
         surname: 'Иванов',
         name: 'Иван',
+        patronymic: null,
         gender: 'MALE'
       }
     }

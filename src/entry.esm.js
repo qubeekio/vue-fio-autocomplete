@@ -1,5 +1,5 @@
 // Import vue component
-import component from '@/fio-autocomplete.vue'
+import component from "@/fio-autocomplete.vue"
 
 // Default export is installable instance of component.
 // IIFE injects install function into component, allowing component
@@ -10,7 +10,7 @@ export default /*#__PURE__*/ (() => {
 
   // Attach install function executed by Vue.use()
   installable.install = (Vue) => {
-    Vue.component('FioAutocomplete', installable)
+    Vue.component("FioAutocomplete", installable)
   }
   return installable
 })()

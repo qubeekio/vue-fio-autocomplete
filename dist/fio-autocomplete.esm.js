@@ -3525,7 +3525,7 @@ var axios = axios_1;
 
 //
 var script = {
-  name: 'FioAutocomplete',
+  name: "FioAutocomplete",
   // vue component name
   props: {
     api: {
@@ -3544,7 +3544,7 @@ var script = {
 
   data() {
     return {
-      inputValue: '',
+      inputValue: "",
       originalValue: null,
       data: {
         name: null,
@@ -3553,9 +3553,10 @@ var script = {
         gender: null,
         qc: null
       },
+      ignoreMissedValues: false,
       disableSearch: false,
       selectedIndex: 0,
-      step: 'surname',
+      step: "surname",
       suggestions: [],
       focused: false
     };
@@ -3567,19 +3568,19 @@ var script = {
     },
 
     prefix() {
-      if (this.step === 'name') {
-        return [this.data.surname].join(' ') + ' ';
+      if (this.step === "name") {
+        return [this.data.surname].join(" ") + " ";
       }
 
-      if (this.step === 'patronymic') {
-        return [this.data.surname, this.data.name].join(' ') + ' ';
+      if (this.step === "patronymic") {
+        return [this.data.surname, this.data.name].join(" ") + " ";
       }
 
-      return '';
+      return "";
     },
 
     fio() {
-      return [this.data.surname, this.data.name, this.data.patronymic].join(' ').trim();
+      return [this.data.surname, this.data.name, this.data.patronymic].join(" ").trim();
     },
 
     selection() {
@@ -3593,11 +3594,11 @@ var script = {
     stepValue() {
       let value = this.inputValue;
 
-      if (this.step === 'name' || this.step === 'patronymic') {
-        value = value.replace(this.data.surname, '');
+      if (this.step === "name" || this.step === "patronymic") {
+        value = value.replace(this.data.surname, "");
 
-        if (this.step === 'patronymic') {
-          value = value.trimStart().replace(this.data.name, '');
+        if (this.step === "patronymic") {
+          value = value.trimStart().replace(this.data.name, "");
         }
       }
 
@@ -3610,36 +3611,36 @@ var script = {
           return this.suggestions[0].value;
         }
 
-        if (this.stepValue.endsWith(' ') && this.stepValue.length <= 1) {
+        if (this.stepValue.endsWith(" ") && this.stepValue.length <= 1) {
           switch (this.step) {
-            case 'name':
-              return 'Имя Отчество';
+            case "name":
+              return "Имя Отчество";
 
-            case 'patronymic':
-              return 'Отчество';
+            case "patronymic":
+              return "Отчество";
 
             case undefined:
-              return '';
+              return "";
           }
         }
 
-        return '';
+        return "";
       }
 
       if (this.hasData) {
-        return '';
+        return "";
       }
 
-      return 'Иванов Сергей Михайлович';
+      return "Иванов Сергей Михайлович";
     }
 
   },
   watch: {
     inputValue(newVal, oldVal) {
-      this.inputValue = this.inputValue.replaceAll('  ', ' '); // When user cleared whole input value.
+      this.inputValue = this.inputValue.replaceAll("  ", " "); // When user cleared whole input value.
 
-      if (this.inputValue === '') {
-        this.step = 'surname';
+      if (this.inputValue === "") {
+        this.step = "surname";
         this.data = {
           name: null,
           surname: null,
@@ -3656,15 +3657,15 @@ var script = {
 
         if (diff !== 0) {
           // When user decided to delete something more than 1 char.
-          let oldChunks = oldVal.split(' ').filter(i => i.length > 0);
-          let newChunks = newVal.split(' ').filter(i => i.length > 0);
+          let oldChunks = oldVal.split(" ").filter(i => i.length > 0);
+          let newChunks = newVal.split(" ").filter(i => i.length > 0);
 
           if (diff > 1 || oldChunks.length !== newChunks.length) {
             this.inputValue = this.inputValue.trim();
-            let steps = ['surname', 'name', 'patronymic'];
+            let steps = ["surname", "name", "patronymic"];
             steps.forEach((step, i) => {
               if (newChunks[i]) {
-                this.data[step] = typeof newChunks[i + 1] !== 'undefined' ? newChunks[i] : null;
+                this.data[step] = typeof newChunks[i + 1] !== "undefined" || this.ignoreMissedValues ? newChunks[i] : null;
                 this.step = step;
               } else {
                 this.data[step] = null;
@@ -3693,12 +3694,16 @@ var script = {
 
   },
 
-  beforeMounted() {
+  mounted() {
     this.data = { ...this.data,
       ...this.value
     };
-    this.inputValue = this.fio;
+    this.ignoreMissedValues = true;
     this.disableSearch = true;
+    this.inputValue = this.fio;
+    this.$nextTick(() => {
+      this.ignoreMissedValues = false;
+    });
   },
 
   methods: {
@@ -3718,7 +3723,7 @@ var script = {
       this.inputValue = this.inputValue.toLowerCase().replace(/[А-Яа-яЁёA-Za-z]\S*/g, w => w.replace(/^[A-Za-zА-Яа-яЁё]/, c => c.toUpperCase()));
       this.disableSearch = !/[А-Яа-яЁё_-]/.test(data) && data !== null;
 
-      if (!/[A-Za-zА-Яа-яЁё_-]/.test(data) && data !== null && data !== ' ') {
+      if (!/[A-Za-zА-Яа-яЁё_-]/.test(data) && data !== null && data !== " ") {
         this.inputValue = this.inputValue.slice(0, -1);
       } else {
         this.loadSuggestions();
@@ -3733,8 +3738,8 @@ var script = {
       this.originalValue = null;
       this.setValue();
 
-      if (this.step === 'patronymic') {
-        this.inputValue += ' ';
+      if (this.step === "patronymic") {
+        this.inputValue += " ";
       }
     },
 
@@ -3789,21 +3794,21 @@ var script = {
       if (!this.selectedIndex) {
         this.focused = false;
         this.setValue(null, false);
-        this.$emit('input', this.data);
+        this.$emit("input", this.data);
       }
     },
 
     chooseNextStep() {
-      if (this.step === 'surname') return 'name';
-      if (this.step === 'name') return 'patronymic';
-      if (this.step === undefined) return 'surname';
+      if (this.step === "surname") return "name";
+      if (this.step === "name") return "patronymic";
+      if (this.step === undefined) return "surname";
     },
 
     choosePreviousStep() {
-      if (this.step === 'name') return 'surname';
-      if (this.step === 'patronymic') return 'name';
-      if (this.step === undefined) return 'patronymic';
-      return 'surname';
+      if (this.step === "name") return "surname";
+      if (this.step === "patronymic") return "name";
+      if (this.step === undefined) return "patronymic";
+      return "surname";
     },
 
     setValue(selection = null, setNextStep = true) {
@@ -3828,9 +3833,9 @@ var script = {
       if (setNextStep) {
         this.inputValue = this.fio;
 
-        if (this.step !== 'patronymic') {
+        if (this.step !== "patronymic") {
           this.step = this.chooseNextStep();
-          this.inputValue += ' ';
+          this.inputValue += " ";
           this.$refs.input.focus();
           this.focused = true;
         }
@@ -3844,18 +3849,22 @@ var script = {
         this.step = this.choosePreviousStep();
         this.data[this.step] = null;
 
-        if (this.step === 'name') {
+        if (this.step === "name") {
           this.data.gender = null;
         }
       }
     },
 
     loadSuggestions() {
-      !this.disableSearch ? axios.post(this.api, {
-        query: this.stepValue,
-        gender: this.data.gender,
-        parts: [this.step ? this.step.toUpperCase() : this.hasData ? 'PATRONYMIC' : 'SURNAME']
-      }, { ...this.requestOptions
+      !this.disableSearch ? axios.request({
+        method: "POST",
+        url: this.api,
+        params: {
+          query: this.stepValue,
+          gender: this.data.gender,
+          parts: [this.step ? this.step.toUpperCase() : this.hasData ? "PATRONYMIC" : "SURNAME"]
+        },
+        ...this.requestOptions
       }).then(({
         data
       }) => {
@@ -3979,15 +3988,18 @@ var __vue_render__ = function () {
     ref: "input",
     staticClass: "fio-autocomplete--input",
     attrs: {
-      "type": "text",
       "autocapitalize": "off",
       "autocomplete": "off",
-      "autocorrect": "off"
+      "autocorrect": "off",
+      "type": "text"
     },
     domProps: {
       "value": _vm.inputValue
     },
     on: {
+      "blur": _vm.afterFocus,
+      "focusin": _vm.onFocus,
+      "input": _vm.setInputValue,
       "keydown": [function ($event) {
         if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) {
           return null;
@@ -4009,9 +4021,6 @@ var __vue_render__ = function () {
         $event.preventDefault();
         return _vm.decrement($event);
       }],
-      "input": _vm.setInputValue,
-      "focusin": _vm.onFocus,
-      "blur": _vm.afterFocus,
       "keyup": function ($event) {
         if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "space", 32, $event.key, [" ", "Spacebar"])) {
           return null;
@@ -4082,7 +4091,7 @@ var entry_esm = /*#__PURE__*/(() => {
   const installable = __vue_component__; // Attach install function executed by Vue.use()
 
   installable.install = Vue => {
-    Vue.component('FioAutocomplete', installable);
+    Vue.component("FioAutocomplete", installable);
   };
 
   return installable;

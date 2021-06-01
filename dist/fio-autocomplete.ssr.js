@@ -3582,7 +3582,7 @@ var axios_1 = axios$1;
 // Allow use of default import syntax in TypeScript
 var _default = axios$1;
 axios_1.default = _default;var axios = axios_1;var script = {
-  name: 'FioAutocomplete',
+  name: "FioAutocomplete",
   // vue component name
   props: {
     api: {
@@ -3600,7 +3600,7 @@ axios_1.default = _default;var axios = axios_1;var script = {
   },
   data: function data() {
     return {
-      inputValue: '',
+      inputValue: "",
       originalValue: null,
       data: {
         name: null,
@@ -3609,9 +3609,10 @@ axios_1.default = _default;var axios = axios_1;var script = {
         gender: null,
         qc: null
       },
+      ignoreMissedValues: false,
       disableSearch: false,
       selectedIndex: 0,
-      step: 'surname',
+      step: "surname",
       suggestions: [],
       focused: false
     };
@@ -3621,18 +3622,18 @@ axios_1.default = _default;var axios = axios_1;var script = {
       return !!(this.data.surname || this.data.name || this.data.patronymic);
     },
     prefix: function prefix() {
-      if (this.step === 'name') {
-        return [this.data.surname].join(' ') + ' ';
+      if (this.step === "name") {
+        return [this.data.surname].join(" ") + " ";
       }
 
-      if (this.step === 'patronymic') {
-        return [this.data.surname, this.data.name].join(' ') + ' ';
+      if (this.step === "patronymic") {
+        return [this.data.surname, this.data.name].join(" ") + " ";
       }
 
-      return '';
+      return "";
     },
     fio: function fio() {
-      return [this.data.surname, this.data.name, this.data.patronymic].join(' ').trim();
+      return [this.data.surname, this.data.name, this.data.patronymic].join(" ").trim();
     },
     selection: function selection() {
       if (this.suggestions[this.selectedIndex]) {
@@ -3644,11 +3645,11 @@ axios_1.default = _default;var axios = axios_1;var script = {
     stepValue: function stepValue() {
       var value = this.inputValue;
 
-      if (this.step === 'name' || this.step === 'patronymic') {
-        value = value.replace(this.data.surname, '');
+      if (this.step === "name" || this.step === "patronymic") {
+        value = value.replace(this.data.surname, "");
 
-        if (this.step === 'patronymic') {
-          value = value.trimStart().replace(this.data.name, '');
+        if (this.step === "patronymic") {
+          value = value.trimStart().replace(this.data.name, "");
         }
       }
 
@@ -3660,37 +3661,37 @@ axios_1.default = _default;var axios = axios_1;var script = {
           return this.suggestions[0].value;
         }
 
-        if (this.stepValue.endsWith(' ') && this.stepValue.length <= 1) {
+        if (this.stepValue.endsWith(" ") && this.stepValue.length <= 1) {
           switch (this.step) {
-            case 'name':
-              return 'Имя Отчество';
+            case "name":
+              return "Имя Отчество";
 
-            case 'patronymic':
-              return 'Отчество';
+            case "patronymic":
+              return "Отчество";
 
             case undefined:
-              return '';
+              return "";
           }
         }
 
-        return '';
+        return "";
       }
 
       if (this.hasData) {
-        return '';
+        return "";
       }
 
-      return 'Иванов Сергей Михайлович';
+      return "Иванов Сергей Михайлович";
     }
   },
   watch: {
     inputValue: function inputValue(newVal, oldVal) {
       var _this = this;
 
-      this.inputValue = this.inputValue.replaceAll('  ', ' '); // When user cleared whole input value.
+      this.inputValue = this.inputValue.replaceAll("  ", " "); // When user cleared whole input value.
 
-      if (this.inputValue === '') {
-        this.step = 'surname';
+      if (this.inputValue === "") {
+        this.step = "surname";
         this.data = {
           name: null,
           surname: null,
@@ -3707,19 +3708,19 @@ axios_1.default = _default;var axios = axios_1;var script = {
 
         if (diff !== 0) {
           // When user decided to delete something more than 1 char.
-          var oldChunks = oldVal.split(' ').filter(function (i) {
+          var oldChunks = oldVal.split(" ").filter(function (i) {
             return i.length > 0;
           });
-          var newChunks = newVal.split(' ').filter(function (i) {
+          var newChunks = newVal.split(" ").filter(function (i) {
             return i.length > 0;
           });
 
           if (diff > 1 || oldChunks.length !== newChunks.length) {
             this.inputValue = this.inputValue.trim();
-            var steps = ['surname', 'name', 'patronymic'];
+            var steps = ["surname", "name", "patronymic"];
             steps.forEach(function (step, i) {
               if (newChunks[i]) {
-                _this.data[step] = typeof newChunks[i + 1] !== 'undefined' ? newChunks[i] : null;
+                _this.data[step] = typeof newChunks[i + 1] !== "undefined" || _this.ignoreMissedValues ? newChunks[i] : null;
                 _this.step = step;
               } else {
                 _this.data[step] = null;
@@ -3757,10 +3758,16 @@ axios_1.default = _default;var axios = axios_1;var script = {
       }
     }
   },
-  beforeMounted: function beforeMounted() {
+  mounted: function mounted() {
+    var _this2 = this;
+
     this.data = _objectSpread2(_objectSpread2({}, this.data), this.value);
-    this.inputValue = this.fio;
+    this.ignoreMissedValues = true;
     this.disableSearch = true;
+    this.inputValue = this.fio;
+    this.$nextTick(function () {
+      _this2.ignoreMissedValues = false;
+    });
   },
   methods: {
     restoreOriginalValue: function restoreOriginalValue() {
@@ -3781,7 +3788,7 @@ axios_1.default = _default;var axios = axios_1;var script = {
       });
       this.disableSearch = !/[А-Яа-яЁё_-]/.test(data) && data !== null;
 
-      if (!/[A-Za-zА-Яа-яЁё_-]/.test(data) && data !== null && data !== ' ') {
+      if (!/[A-Za-zА-Яа-яЁё_-]/.test(data) && data !== null && data !== " ") {
         this.inputValue = this.inputValue.slice(0, -1);
       } else {
         this.loadSuggestions();
@@ -3795,8 +3802,8 @@ axios_1.default = _default;var axios = axios_1;var script = {
       this.originalValue = null;
       this.setValue();
 
-      if (this.step === 'patronymic') {
-        this.inputValue += ' ';
+      if (this.step === "patronymic") {
+        this.inputValue += " ";
       }
     },
     moveScrollBar: function moveScrollBar() {
@@ -3845,19 +3852,19 @@ axios_1.default = _default;var axios = axios_1;var script = {
       if (!this.selectedIndex) {
         this.focused = false;
         this.setValue(null, false);
-        this.$emit('input', this.data);
+        this.$emit("input", this.data);
       }
     },
     chooseNextStep: function chooseNextStep() {
-      if (this.step === 'surname') return 'name';
-      if (this.step === 'name') return 'patronymic';
-      if (this.step === undefined) return 'surname';
+      if (this.step === "surname") return "name";
+      if (this.step === "name") return "patronymic";
+      if (this.step === undefined) return "surname";
     },
     choosePreviousStep: function choosePreviousStep() {
-      if (this.step === 'name') return 'surname';
-      if (this.step === 'patronymic') return 'name';
-      if (this.step === undefined) return 'patronymic';
-      return 'surname';
+      if (this.step === "name") return "surname";
+      if (this.step === "patronymic") return "name";
+      if (this.step === undefined) return "patronymic";
+      return "surname";
     },
     setValue: function setValue() {
       var selection = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
@@ -3883,9 +3890,9 @@ axios_1.default = _default;var axios = axios_1;var script = {
       if (setNextStep) {
         this.inputValue = this.fio;
 
-        if (this.step !== 'patronymic') {
+        if (this.step !== "patronymic") {
           this.step = this.chooseNextStep();
-          this.inputValue += ' ';
+          this.inputValue += " ";
           this.$refs.input.focus();
           this.focused = true;
         }
@@ -3898,24 +3905,28 @@ axios_1.default = _default;var axios = axios_1;var script = {
         this.step = this.choosePreviousStep();
         this.data[this.step] = null;
 
-        if (this.step === 'name') {
+        if (this.step === "name") {
           this.data.gender = null;
         }
       }
     },
     loadSuggestions: function loadSuggestions() {
-      var _this2 = this;
+      var _this3 = this;
 
-      !this.disableSearch ? axios.post(this.api, {
-        query: this.stepValue,
-        gender: this.data.gender,
-        parts: [this.step ? this.step.toUpperCase() : this.hasData ? 'PATRONYMIC' : 'SURNAME']
-      }, _objectSpread2({}, this.requestOptions)).then(function (_ref3) {
+      !this.disableSearch ? axios.request(_objectSpread2({
+        method: "POST",
+        url: this.api,
+        params: {
+          query: this.stepValue,
+          gender: this.data.gender,
+          parts: [this.step ? this.step.toUpperCase() : this.hasData ? "PATRONYMIC" : "SURNAME"]
+        }
+      }, this.requestOptions)).then(function (_ref3) {
         var data = _ref3.data;
-        _this2.selectedIndex = -1;
-        _this2.suggestions = data.suggestions;
+        _this3.selectedIndex = -1;
+        _this3.suggestions = data.suggestions;
 
-        _this2.$forceUpdate();
+        _this3.$forceUpdate();
       }) : null;
     }
   }
@@ -4005,7 +4016,7 @@ var __vue_render__ = function __vue_render__() {
 
   return _c('div', {
     staticClass: "fio-autocomplete"
-  }, [_vm._ssrNode("<div class=\"fio-autocomplete--wrapper\"><div class=\"fio-autocomplete--sugg\">" + (_vm.placeholder ? "<span class=\"fio-autocomplete--placeholder\">" + _vm._ssrEscape(_vm._s(_vm.fio)) + "</span>" : "<!---->") + " <span class=\"fio-autocomplete--mask\">" + _vm._ssrEscape(_vm._s(' ' + _vm.placeholder)) + "</span></div> <input type=\"text\" autocapitalize=\"off\" autocomplete=\"off\" autocorrect=\"off\"" + _vm._ssrAttr("value", _vm.inputValue) + " class=\"fio-autocomplete--input\"></div> " + (_vm.suggestions.length ? "<ul class=\"fio-autocomplete--dropdown\">" + _vm._ssrList(_vm.suggestions, function (option, index) {
+  }, [_vm._ssrNode("<div class=\"fio-autocomplete--wrapper\"><div class=\"fio-autocomplete--sugg\">" + (_vm.placeholder ? "<span class=\"fio-autocomplete--placeholder\">" + _vm._ssrEscape(_vm._s(_vm.fio)) + "</span>" : "<!---->") + " <span class=\"fio-autocomplete--mask\">" + _vm._ssrEscape(_vm._s(' ' + _vm.placeholder)) + "</span></div> <input autocapitalize=\"off\" autocomplete=\"off\" autocorrect=\"off\" type=\"text\"" + _vm._ssrAttr("value", _vm.inputValue) + " class=\"fio-autocomplete--input\"></div> " + (_vm.suggestions.length ? "<ul class=\"fio-autocomplete--dropdown\">" + _vm._ssrList(_vm.suggestions, function (option, index) {
     return "<li" + _vm._ssrClass("fio-autocomplete--dropdown--item", {
       selected: _vm.selectedIndex === index
     }) + ">" + _vm._ssrEscape(_vm._s(_vm.prefix + option.value)) + "</li>";
@@ -4021,7 +4032,7 @@ var __vue_inject_styles__ = undefined;
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-4ea297c6";
+var __vue_module_identifier__ = "data-v-29aa0444";
 /* functional template */
 
 var __vue_is_functional_template__ = false;
@@ -4043,7 +4054,7 @@ var component = /*#__PURE__*/(function () {
   var installable = __vue_component__; // Attach install function executed by Vue.use()
 
   installable.install = function (Vue) {
-    Vue.component('FioAutocomplete', installable);
+    Vue.component("FioAutocomplete", installable);
   };
 
   return installable;
@@ -4058,5 +4069,5 @@ Object.entries(namedExports).forEach(function (_ref) {
       exportName = _ref2[0],
       exported = _ref2[1];
 
-  if (exportName !== 'default') component[exportName] = exported;
+  if (exportName !== "default") component[exportName] = exported;
 });module.exports=component;

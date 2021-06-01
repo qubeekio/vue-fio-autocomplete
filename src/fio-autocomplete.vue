@@ -212,7 +212,7 @@ export default {
       }
     }
   },
-  created() {
+  beforeMounted() {
     this.data = { ...this.data, ...this.value }
     this.inputValue = this.fio
     this.disableSearch = true

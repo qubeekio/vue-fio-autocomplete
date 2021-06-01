@@ -3693,7 +3693,7 @@ var script = {
 
   },
 
-  created() {
+  beforeMounted() {
     this.data = { ...this.data,
       ...this.value
     };

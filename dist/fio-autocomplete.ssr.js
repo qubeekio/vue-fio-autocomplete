@@ -3757,7 +3757,7 @@ axios_1.default = _default;var axios = axios_1;var script = {
       }
     }
   },
-  created: function created() {
+  beforeMounted: function beforeMounted() {
     this.data = _objectSpread2(_objectSpread2({}, this.data), this.value);
     this.inputValue = this.fio;
     this.disableSearch = true;
@@ -4021,7 +4021,7 @@ var __vue_inject_styles__ = undefined;
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-470e5b8e";
+var __vue_module_identifier__ = "data-v-4ea297c6";
 /* functional template */
 
 var __vue_is_functional_template__ = false;

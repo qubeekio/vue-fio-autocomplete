@@ -3870,7 +3870,7 @@ axios_1.default = _default;var axios = axios_1;var script = {
       var selection = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
       var setNextStep = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
       this.originalValue = null;
-      this.selectedIndex = -1;
+      this.selectedIndex = null;
 
       if (selection) {
         this.data[this.step] = selection.value;
@@ -3916,14 +3916,14 @@ axios_1.default = _default;var axios = axios_1;var script = {
       !this.disableSearch ? axios.request(_objectSpread2({
         method: "POST",
         url: this.api,
-        params: {
+        data: {
           query: this.stepValue,
           gender: this.data.gender,
           parts: [this.step ? this.step.toUpperCase() : this.hasData ? "PATRONYMIC" : "SURNAME"]
         }
       }, this.requestOptions)).then(function (_ref3) {
         var data = _ref3.data;
-        _this3.selectedIndex = -1;
+        _this3.selectedIndex = null;
         _this3.suggestions = data.suggestions;
 
         _this3.$forceUpdate();
@@ -4032,7 +4032,7 @@ var __vue_inject_styles__ = undefined;
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-29aa0444";
+var __vue_module_identifier__ = "data-v-403d334c";
 /* functional template */
 
 var __vue_is_functional_template__ = false;

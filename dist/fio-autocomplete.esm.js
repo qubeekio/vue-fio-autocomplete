@@ -3813,7 +3813,7 @@ var script = {
 
     setValue(selection = null, setNextStep = true) {
       this.originalValue = null;
-      this.selectedIndex = -1;
+      this.selectedIndex = null;
 
       if (selection) {
         this.data[this.step] = selection.value;
@@ -3859,7 +3859,7 @@ var script = {
       !this.disableSearch ? axios.request({
         method: "POST",
         url: this.api,
-        params: {
+        data: {
           query: this.stepValue,
           gender: this.data.gender,
           parts: [this.step ? this.step.toUpperCase() : this.hasData ? "PATRONYMIC" : "SURNAME"]
@@ -3868,7 +3868,7 @@ var script = {
       }).then(({
         data
       }) => {
-        this.selectedIndex = -1;
+        this.selectedIndex = null;
         this.suggestions = data.suggestions;
         this.$forceUpdate();
       }) : null;

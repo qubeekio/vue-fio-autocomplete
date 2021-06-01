@@ -321,7 +321,7 @@ export default {
     },
     setValue(selection = null, setNextStep = true) {
       this.originalValue = null
-      this.selectedIndex = -1
+      this.selectedIndex = null
       if (selection) {
         this.data[this.step] = selection.value
         this.data.gender = selection.data.gender
@@ -366,7 +366,7 @@ export default {
             .request({
               method: "POST",
               url: this.api,
-              params: {
+              data: {
                 query: this.stepValue,
                 gender: this.data.gender,
                 parts: [
@@ -380,7 +380,7 @@ export default {
               ...this.requestOptions
             })
             .then(({ data }) => {
-              this.selectedIndex = -1
+              this.selectedIndex = null
               this.suggestions = data.suggestions
               this.$forceUpdate()
             })

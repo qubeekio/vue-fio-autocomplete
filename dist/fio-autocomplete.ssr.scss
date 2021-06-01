@@ -1,0 +1,70 @@
+$input-text-color: black;
+$placeholder-color: #ddd;
+$input-height: 35px;
+$dropdown-bg-color: #fff;
+$input-padding: 12px;
+
+.fio-autocomplete {
+  position: relative;
+  &--wrapper {
+    width: 100%;
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    min-height: $input-height;
+    border: 1px solid #ddd;
+    &:focus-within {
+      border: 1px solid black;
+    }
+  }
+  &--sugg {
+    padding: 0 $input-padding;
+    min-height: $input-height;
+  }
+  &--placeholder {
+    white-space: nowrap;
+    color: transparent;
+    line-height: $input-height;
+  }
+  &--mask {
+    white-space: nowrap;
+    color: $placeholder-color;
+    line-height: $input-height;
+  }
+  &--input {
+    width: 100%;
+    position: absolute;
+    line-height: $input-height;
+    background-color: transparent;
+    appearance: none;
+    padding: 0 $input-padding;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit;
+    color: $input-text-color;
+    outline: none;
+    border: none;
+  }
+  &--dropdown {
+    position: absolute;
+    width: 100%;
+    background-color: $dropdown-bg-color;
+    top: calc(8px + #{$input-height});
+    box-shadow: 0px 0px 2px black;
+    border: 1px solid transparent;
+    max-height: 200px;
+    overflow-y: scroll;
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
+    &--item {
+      padding: $input-padding;
+      cursor: pointer;
+      background-color: #fff;
+      &.selected {
+        background-color: #ddd;
+      }
+    }
+  }
+}

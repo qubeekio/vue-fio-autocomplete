@@ -1,9 +1,9 @@
 {
   "name": "@qubeekio/vue-fio-autocomplete",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "scripts": {
-    "serve": "cross-env TOKEN=123 vue-cli-service serve dev/serve.js",
+    "serve": "cross-env vue-cli-service serve dev/serve.js",
     "build": "cross-env NODE_ENV=production rollup --config build/rollup.config.js",
     "lint": "vue-cli-service lint",
     "build:es": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format es",

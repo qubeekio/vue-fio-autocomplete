@@ -3772,16 +3772,25 @@ var script = {
       this.moveScrollBar();
     },
 
+    setValueBySelection() {
+      this.$refs.input.focus();
+      this.setValue(this.selection);
+    },
+
     onFocus() {
-      this.data[this.step] = null;
-      this.focused = true;
-      this.loadSuggestions();
+      if (!this.selection) {
+        this.data[this.step] = null;
+        this.focused = true;
+        this.loadSuggestions();
+      }
     },
 
     afterFocus() {
-      this.focused = false;
-      this.setValue(null, false);
-      this.$emit('input', this.data);
+      if (!this.selectedIndex) {
+        this.focused = false;
+        this.setValue(null, false);
+        this.$emit('input', this.data);
+      }
     },
 
     chooseNextStep() {
@@ -3852,6 +3861,7 @@ var script = {
       }) => {
         this.selectedIndex = -1;
         this.suggestions = data.suggestions;
+        this.$forceUpdate();
       }) : null;
     }
 
@@ -3983,7 +3993,7 @@ var __vue_render__ = function () {
           return null;
         }
 
-        return _vm.setValue(_vm.selection, true);
+        return _vm.setValue(_vm.selection);
       }, function ($event) {
         if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "down", 40, $event.key, ["Down", "ArrowDown"])) {
           return null;
@@ -4030,9 +4040,7 @@ var __vue_render__ = function () {
         "textContent": _vm._s(_vm.prefix + option.value)
       },
       on: {
-        "click": function ($event) {
-          return _vm.setValue(_vm.selection, true);
-        },
+        "click": _vm.setValueBySelection,
         "mousemove": function ($event) {
           _vm.selectedIndex = index;
         }

@@ -17,7 +17,7 @@
         autocapitalize="off"
         autocomplete="off"
         autocorrect="off"
-        @keydown.enter="setValue(selection, true)"
+        @keydown.enter="setValue(selection)"
         @input="setInputValue"
         @focusin="onFocus"
         @keydown.down.prevent="increment"
@@ -38,7 +38,7 @@
         ref="scrollItems"
         :class="{ selected: selectedIndex === index }"
         class="fio-autocomplete--dropdown--item"
-        @click="setValue(selection, true)"
+        @click="setValueBySelection"
         @mousemove="selectedIndex = index"
         v-text="prefix + option.value"
       />
@@ -280,15 +280,23 @@ export default {
       }
       this.moveScrollBar()
     },
+    setValueBySelection() {
+      this.$refs.input.focus()
+      this.setValue(this.selection)
+    },
     onFocus() {
-      this.data[this.step] = null
-      this.focused = true
-      this.loadSuggestions()
+      if (!this.selection) {
+        this.data[this.step] = null
+        this.focused = true
+        this.loadSuggestions()
+      }
     },
     afterFocus() {
-      this.focused = false
-      this.setValue(null, false)
-      this.$emit('input', this.data)
+      if (!this.selectedIndex) {
+        this.focused = false
+        this.setValue(null, false)
+        this.$emit('input', this.data)
+      }
     },
     chooseNextStep() {
       if (this.step === 'surname') return 'name'
@@ -365,6 +373,7 @@ export default {
             .then(({ data }) => {
               this.selectedIndex = -1
               this.suggestions = data.suggestions
+              this.$forceUpdate()
             })
         : null
     }

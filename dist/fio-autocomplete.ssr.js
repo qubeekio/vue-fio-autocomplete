@@ -3830,15 +3830,23 @@ axios_1.default = _default;var axios = axios_1;var script = {
 
       this.moveScrollBar();
     },
+    setValueBySelection: function setValueBySelection() {
+      this.$refs.input.focus();
+      this.setValue(this.selection);
+    },
     onFocus: function onFocus() {
-      this.data[this.step] = null;
-      this.focused = true;
-      this.loadSuggestions();
+      if (!this.selection) {
+        this.data[this.step] = null;
+        this.focused = true;
+        this.loadSuggestions();
+      }
     },
     afterFocus: function afterFocus() {
-      this.focused = false;
-      this.setValue(null, false);
-      this.$emit('input', this.data);
+      if (!this.selectedIndex) {
+        this.focused = false;
+        this.setValue(null, false);
+        this.$emit('input', this.data);
+      }
     },
     chooseNextStep: function chooseNextStep() {
       if (this.step === 'surname') return 'name';
@@ -3906,6 +3914,8 @@ axios_1.default = _default;var axios = axios_1;var script = {
         var data = _ref3.data;
         _this2.selectedIndex = -1;
         _this2.suggestions = data.suggestions;
+
+        _this2.$forceUpdate();
       }) : null;
     }
   }
@@ -4011,7 +4021,7 @@ var __vue_inject_styles__ = undefined;
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-69385daa";
+var __vue_module_identifier__ = "data-v-470e5b8e";
 /* functional template */
 
 var __vue_is_functional_template__ = false;

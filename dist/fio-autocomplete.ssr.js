@@ -36,6 +36,22 @@ function _objectSpread2(target) {
   return target;
 }
 
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function (obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return _typeof(obj);
+}
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
   try {
     var info = gen[key](arg);
@@ -3609,6 +3625,7 @@ axios_1.default = _default;var axios = axios_1;var script = {
         gender: null,
         qc: null
       },
+      canceller: axios.CancelToken.source(),
       ignoreMissedValues: false,
       disableSearch: false,
       selectedIndex: 0,
@@ -3913,8 +3930,16 @@ axios_1.default = _default;var axios = axios_1;var script = {
     loadSuggestions: function loadSuggestions() {
       var _this3 = this;
 
+      // Check if there are any previous pending requests
+      if (_typeof(this.canceller) !== ("undefined" )) {
+        this.canceller.cancel("Operation canceled due to new request.");
+      } // Save the cancel token for the current request
+
+
+      this.canceller = axios.CancelToken.source();
       !this.disableSearch ? axios.request(_objectSpread2({
         method: "POST",
+        cancelToken: this.canceller.token,
         url: this.api,
         data: {
           query: this.stepValue,
@@ -4032,7 +4057,7 @@ var __vue_inject_styles__ = undefined;
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-403d334c";
+var __vue_module_identifier__ = "data-v-1a98f5e4";
 /* functional template */
 
 var __vue_is_functional_template__ = false;

@@ -3553,6 +3553,7 @@ var script = {
         gender: null,
         qc: null
       },
+      canceller: axios.CancelToken.source(),
       ignoreMissedValues: false,
       disableSearch: false,
       selectedIndex: 0,
@@ -3856,8 +3857,16 @@ var script = {
     },
 
     loadSuggestions() {
+      // Check if there are any previous pending requests
+      if (typeof this.canceller !== typeof undefined) {
+        this.canceller.cancel("Operation canceled due to new request.");
+      } // Save the cancel token for the current request
+
+
+      this.canceller = axios.CancelToken.source();
       !this.disableSearch ? axios.request({
         method: "POST",
+        cancelToken: this.canceller.token,
         url: this.api,
         data: {
           query: this.stepValue,

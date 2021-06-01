@@ -4039,7 +4039,7 @@ var __vue_render__ = function () {
         return _vm.setNextStep($event);
       }
     }
-  })]), _vm._v(" "), _vm.suggestions.length ? _c('ul', {
+  })]), _vm._v(" "), _vm.suggestions.length && _vm.focused ? _c('ul', {
     ref: "scroll",
     staticClass: "fio-autocomplete--dropdown",
     on: {

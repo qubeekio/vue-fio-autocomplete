@@ -27,7 +27,7 @@
       />
     </div>
     <ul
-      v-if="suggestions.length"
+      v-if="suggestions.length && focused"
       ref="scroll"
       class="fio-autocomplete--dropdown"
       @mouseleave="restoreOriginalValue"

@@ -4041,7 +4041,7 @@ var __vue_render__ = function __vue_render__() {
 
   return _c('div', {
     staticClass: "fio-autocomplete"
-  }, [_vm._ssrNode("<div class=\"fio-autocomplete--wrapper\"><div class=\"fio-autocomplete--sugg\">" + (_vm.placeholder ? "<span class=\"fio-autocomplete--placeholder\">" + _vm._ssrEscape(_vm._s(_vm.fio)) + "</span>" : "<!---->") + " <span class=\"fio-autocomplete--mask\">" + _vm._ssrEscape(_vm._s(' ' + _vm.placeholder)) + "</span></div> <input autocapitalize=\"off\" autocomplete=\"off\" autocorrect=\"off\" type=\"text\"" + _vm._ssrAttr("value", _vm.inputValue) + " class=\"fio-autocomplete--input\"></div> " + (_vm.suggestions.length ? "<ul class=\"fio-autocomplete--dropdown\">" + _vm._ssrList(_vm.suggestions, function (option, index) {
+  }, [_vm._ssrNode("<div class=\"fio-autocomplete--wrapper\"><div class=\"fio-autocomplete--sugg\">" + (_vm.placeholder ? "<span class=\"fio-autocomplete--placeholder\">" + _vm._ssrEscape(_vm._s(_vm.fio)) + "</span>" : "<!---->") + " <span class=\"fio-autocomplete--mask\">" + _vm._ssrEscape(_vm._s(' ' + _vm.placeholder)) + "</span></div> <input autocapitalize=\"off\" autocomplete=\"off\" autocorrect=\"off\" type=\"text\"" + _vm._ssrAttr("value", _vm.inputValue) + " class=\"fio-autocomplete--input\"></div> " + (_vm.suggestions.length && _vm.focused ? "<ul class=\"fio-autocomplete--dropdown\">" + _vm._ssrList(_vm.suggestions, function (option, index) {
     return "<li" + _vm._ssrClass("fio-autocomplete--dropdown--item", {
       selected: _vm.selectedIndex === index
     }) + ">" + _vm._ssrEscape(_vm._s(_vm.prefix + option.value)) + "</li>";
@@ -4057,7 +4057,7 @@ var __vue_inject_styles__ = undefined;
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-1a98f5e4";
+var __vue_module_identifier__ = "data-v-543cf515";
 /* functional template */
 
 var __vue_is_functional_template__ = false;

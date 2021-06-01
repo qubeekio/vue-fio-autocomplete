@@ -1,56 +1,59 @@
-$input-text-color: black;
-$placeholder-color: #ddd;
-$input-height: 35px;
-$dropdown-bg-color: #fff;
-$input-padding: 12px;
+$fs-input-text-color: black;
+$fs-placeholder-color: #ddd;
+$fs-input-height: 35px;
+$fs-dropdown-bg-color: #fff;
+$fs-input-padding: 12px;
+$fs-input-background: #fff;
+$fs-input-border: 1px solid #ddd;
+$fs-input-border-focused: 1px solid black;
 
 .fio-autocomplete {
   position: relative;
   &--wrapper {
     width: 100%;
-    background-color: #fff;
+    background-color: $fs-input-background;
     display: flex;
     flex-direction: row;
     position: relative;
-    min-height: $input-height;
-    border: 1px solid #ddd;
+    min-height: $fs-input-height;
+    border: $fs-input-border;
     &:focus-within {
-      border: 1px solid black;
+      border: $fs-input-border-focused;
     }
   }
   &--sugg {
-    padding: 0 $input-padding;
-    min-height: $input-height;
+    padding: 0 $fs-input-padding;
+    min-height: $fs-input-height;
   }
   &--placeholder {
     white-space: nowrap;
     color: transparent;
-    line-height: $input-height;
+    line-height: $fs-input-height;
   }
   &--mask {
     white-space: nowrap;
-    color: $placeholder-color;
-    line-height: $input-height;
+    color: $fs-placeholder-color;
+    line-height: $fs-input-height;
   }
   &--input {
     width: 100%;
     position: absolute;
-    line-height: $input-height;
+    line-height: $fs-input-height;
     background-color: transparent;
     appearance: none;
-    padding: 0 $input-padding;
+    padding: 0 $fs-input-padding;
     box-sizing: border-box;
     font-family: inherit;
     font-size: inherit;
-    color: $input-text-color;
+    color: $fs-input-text-color;
     outline: none;
     border: none;
   }
   &--dropdown {
     position: absolute;
     width: 100%;
-    background-color: $dropdown-bg-color;
-    top: calc(8px + #{$input-height});
+    background-color: $fs-dropdown-bg-color;
+    top: calc(8px + #{$fs-input-height});
     box-shadow: 0px 0px 2px black;
     border: 1px solid transparent;
     max-height: 200px;
@@ -59,7 +62,7 @@ $input-padding: 12px;
     padding: 8px 0;
     margin: 0;
     &--item {
-      padding: $input-padding;
+      padding: $fs-input-padding;
       cursor: pointer;
       background-color: #fff;
       &.selected {

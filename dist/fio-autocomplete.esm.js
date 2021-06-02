@@ -3681,6 +3681,8 @@ var script = {
           }
         }
       }
+
+      this.$emit("input", this.data);
     },
 
     selectedIndex() {
@@ -3799,7 +3801,6 @@ var script = {
       if (!this.selectedIndex) {
         this.focused = false;
         this.setValue(null, false);
-        this.$emit("input", this.data);
       }
     },
 

@@ -207,6 +207,8 @@ export default {
           }
         }
       }
+
+      this.$emit("input", this.data)
     },
     selectedIndex() {
       if (this.selection) {
@@ -310,7 +312,6 @@ export default {
       if (!this.selectedIndex) {
         this.focused = false
         this.setValue(null, false)
-        this.$emit("input", this.data)
       }
     },
     chooseNextStep() {

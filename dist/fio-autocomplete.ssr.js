@@ -3764,6 +3764,8 @@ axios_1.default = _default;var axios = axios_1;var script = {
           }
         }
       }
+
+      this.$emit("input", this.data);
     },
     selectedIndex: function selectedIndex() {
       if (this.selection) {
@@ -3873,7 +3875,6 @@ axios_1.default = _default;var axios = axios_1;var script = {
       if (!this.selectedIndex) {
         this.focused = false;
         this.setValue(null, false);
-        this.$emit("input", this.data);
       }
     },
     chooseNextStep: function chooseNextStep() {
@@ -4061,7 +4062,7 @@ var __vue_inject_styles__ = undefined;
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-5f486611";
+var __vue_module_identifier__ = "data-v-1d69383a";
 /* functional template */
 
 var __vue_is_functional_template__ = false;

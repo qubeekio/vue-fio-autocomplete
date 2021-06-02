@@ -274,22 +274,26 @@ export default {
       }
     },
     increment() {
-      const length = this.suggestions.length
-      if (this.selectedIndex + 1 < length) {
-        this.selectedIndex++
-      } else {
-        this.selectedIndex = 0
+      if(this.suggestions.length) {
+        const length = this.suggestions.length
+        if (this.selectedIndex + 1 < length) {
+          this.selectedIndex++
+        } else {
+          this.selectedIndex = 0
+        }
+        this.moveScrollBar()
       }
-      this.moveScrollBar()
     },
     decrement() {
-      const length = this.suggestions.length
-      if (this.selectedIndex - 1 >= 0) {
-        this.selectedIndex--
-      } else {
-        this.selectedIndex = length - 1
+      if(this.suggestions.length) {
+        const length = this.suggestions.length
+        if (this.selectedIndex - 1 >= 0) {
+          this.selectedIndex--
+        } else {
+          this.selectedIndex = length - 1
+        }
+        this.moveScrollBar()
       }
-      this.moveScrollBar()
     },
     setValueBySelection() {
       this.$refs.input.focus()

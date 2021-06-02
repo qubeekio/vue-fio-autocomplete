@@ -3833,26 +3833,30 @@ axios_1.default = _default;var axios = axios_1;var script = {
       }
     },
     increment: function increment() {
-      var length = this.suggestions.length;
+      if (this.suggestions.length) {
+        var length = this.suggestions.length;
 
-      if (this.selectedIndex + 1 < length) {
-        this.selectedIndex++;
-      } else {
-        this.selectedIndex = 0;
+        if (this.selectedIndex + 1 < length) {
+          this.selectedIndex++;
+        } else {
+          this.selectedIndex = 0;
+        }
+
+        this.moveScrollBar();
       }
-
-      this.moveScrollBar();
     },
     decrement: function decrement() {
-      var length = this.suggestions.length;
+      if (this.suggestions.length) {
+        var length = this.suggestions.length;
 
-      if (this.selectedIndex - 1 >= 0) {
-        this.selectedIndex--;
-      } else {
-        this.selectedIndex = length - 1;
+        if (this.selectedIndex - 1 >= 0) {
+          this.selectedIndex--;
+        } else {
+          this.selectedIndex = length - 1;
+        }
+
+        this.moveScrollBar();
       }
-
-      this.moveScrollBar();
     },
     setValueBySelection: function setValueBySelection() {
       this.$refs.input.focus();
@@ -4057,7 +4061,7 @@ var __vue_inject_styles__ = undefined;
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-543cf515";
+var __vue_module_identifier__ = "data-v-3e836cbb";
 /* functional template */
 
 var __vue_is_functional_template__ = false;

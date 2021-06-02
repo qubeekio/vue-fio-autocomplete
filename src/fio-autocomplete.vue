@@ -20,7 +20,7 @@
         @blur="afterFocus"
         @focusin="onFocus"
         @input="setInputValue"
-        @keydown.enter="setValue(selection)"
+        @keydown.enter.prevent="setValue(selection)"
         @keydown.down.prevent="increment"
         @keydown.up.prevent="decrement"
         @keyup.space.prevent="setNextStep"

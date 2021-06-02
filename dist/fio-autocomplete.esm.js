@@ -4018,6 +4018,7 @@ var __vue_render__ = function () {
           return null;
         }
 
+        $event.preventDefault();
         return _vm.setValue(_vm.selection);
       }, function ($event) {
         if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "down", 40, $event.key, ["Down", "ArrowDown"])) {

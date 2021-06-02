@@ -1,11 +1,11 @@
-$fs-input-text-color: black;
-$fs-placeholder-color: #ddd;
-$fs-input-height: 35px;
-$fs-dropdown-bg-color: #fff;
-$fs-input-padding: 12px;
-$fs-input-background: #fff;
-$fs-input-border: 1px solid #ddd;
-$fs-input-border-focused: 1px solid black;
+$fs-input-text-color: black !default;
+$fs-placeholder-color: #ddd !default;
+$fs-input-height: 35px !default;
+$fs-dropdown-bg-color: #fff !default;
+$fs-input-padding: 12px !default;
+$fs-input-background: #fff !default;
+$fs-input-border: 1px solid #ddd !default;
+$fs-input-border-focused: 1px solid black !default;
 
 .fio-autocomplete {
   position: relative;

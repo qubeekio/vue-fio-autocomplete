@@ -83,4 +83,4 @@ Currently, this package does not support specifying the key by which the list of
 
 ## License
 
-[MIT](https://github.com/qubeekio/vue-fio-autocomplete/blob/master/LICENSE.md)
+[MIT](https://github.com/qubeekio/vue-fio-autocomplete/blob/master/LICENSE)

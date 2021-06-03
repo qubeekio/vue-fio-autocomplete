@@ -85,3 +85,25 @@ $fs-input-border-focused: 1px solid black !default;
     }
   }
 }
+
+.fio-dropdown-animation-leave-active,
+.fio-dropdown-animation-enter-active {
+  transition: all 0.25s;
+}
+
+.fio-dropdown-animation-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.fio-dropdown-animation-enter-to,
+.fio-dropdown-animation-leave {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fio-dropdown-animation-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+

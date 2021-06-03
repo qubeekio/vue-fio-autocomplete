@@ -4026,11 +4026,38 @@ var __vue_render__ = function __vue_render__() {
 
   return _c('div', {
     staticClass: "fio-autocomplete"
-  }, [_vm._ssrNode("<div class=\"fio-autocomplete--wrapper\"><div class=\"fio-autocomplete--sugg\">" + (_vm.mask ? "<span class=\"fio-autocomplete--placeholder\">" + _vm._ssrEscape(_vm._s(_vm.prefixValue)) + "</span>" : "<!---->") + " <span class=\"fio-autocomplete--mask\">" + _vm._ssrEscape(_vm._s(' ' + _vm.mask)) + "</span></div> <input" + _vm._ssrAttr("autocomplete", _vm.context.autocomplete ? _vm.context.autocomplete : 'off') + _vm._ssrAttr("autocorrect", _vm.context.autocorrect ? _vm.context.autocorrect : 'off') + " autocapitalize=\"words\" type=\"text\"" + _vm._ssrAttr("value", _vm.inputValue) + " class=\"fio-autocomplete--input\"></div> <div class=\"fio-autocomplete--dropdown-wrapper\">" + (_vm.suggestions.length && _vm.focused || _vm.selectedIndex !== null ? "<ul class=\"fio-autocomplete--dropdown\">" + _vm._ssrList(_vm.suggestions, function (option, index) {
-    return "<li" + _vm._ssrClass("fio-autocomplete--dropdown--item", {
-      selected: _vm.selectedIndex === index
-    }) + ">" + _vm._ssrEscape(_vm._s([_vm.prefixValue, option.value, _vm.suffixValue].join(' ').trim())) + "</li>";
-  }) + "</ul>" : "<!---->") + "</div>")]);
+  }, [_vm._ssrNode("<div class=\"fio-autocomplete--wrapper\"><div class=\"fio-autocomplete--sugg\">" + (_vm.mask ? "<span class=\"fio-autocomplete--placeholder\">" + _vm._ssrEscape(_vm._s(_vm.prefixValue)) + "</span>" : "<!---->") + " <span class=\"fio-autocomplete--mask\">" + _vm._ssrEscape(_vm._s(' ' + _vm.mask)) + "</span></div> <input" + _vm._ssrAttr("autocomplete", _vm.context.autocomplete ? _vm.context.autocomplete : 'off') + _vm._ssrAttr("autocorrect", _vm.context.autocorrect ? _vm.context.autocorrect : 'off') + " autocapitalize=\"words\" type=\"text\"" + _vm._ssrAttr("value", _vm.inputValue) + " class=\"fio-autocomplete--input\"></div> "), _vm._ssrNode("<div class=\"fio-autocomplete--dropdown-wrapper\">", "</div>", [_c('transition', {
+    attrs: {
+      "name": "fio-dropdown-animation",
+      "mode": "out-in"
+    }
+  }, [_vm.suggestions.length && _vm.focused || _vm.selectedIndex !== null ? _c('ul', {
+    ref: "scroll",
+    staticClass: "fio-autocomplete--dropdown"
+  }, _vm._l(_vm.suggestions, function (option, index) {
+    return _c('li', {
+      key: option.value,
+      ref: "scrollItems",
+      refInFor: true,
+      staticClass: "fio-autocomplete--dropdown--item",
+      class: {
+        selected: _vm.selectedIndex === index
+      },
+      domProps: {
+        "textContent": _vm._s([_vm.prefixValue, option.value, _vm.suffixValue].join(' ').trim())
+      },
+      on: {
+        "mouseleave": _vm.restoreOriginalValue,
+        "mousemove": function mousemove($event) {
+          _vm.selectedIndex = index;
+        },
+        "click": function click($event) {
+          $event.preventDefault();
+          return _vm.setValueBySelection($event);
+        }
+      }
+    });
+  }), 0) : _vm._e()])], 1)], 2);
 };
 
 var __vue_staticRenderFns__ = [];
@@ -4042,7 +4069,7 @@ var __vue_inject_styles__ = undefined;
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-32f551e6";
+var __vue_module_identifier__ = "data-v-3233f31a";
 /* functional template */
 
 var __vue_is_functional_template__ = false;

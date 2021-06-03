@@ -4070,6 +4070,11 @@ var __vue_render__ = function () {
     }
   })]), _vm._v(" "), _c('div', {
     staticClass: "fio-autocomplete--dropdown-wrapper"
+  }, [_c('transition', {
+    attrs: {
+      "name": "fio-dropdown-animation",
+      "mode": "out-in"
+    }
   }, [_vm.suggestions.length && _vm.focused || _vm.selectedIndex !== null ? _c('ul', {
     ref: "scroll",
     staticClass: "fio-autocomplete--dropdown"
@@ -4096,7 +4101,7 @@ var __vue_render__ = function () {
         }
       }
     });
-  }), 0) : _vm._e()])]);
+  }), 0) : _vm._e()])], 1)]);
 };
 
 var __vue_staticRenderFns__ = [];

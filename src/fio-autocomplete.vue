@@ -30,23 +30,25 @@
       />
     </div>
     <div class="fio-autocomplete--dropdown-wrapper">
-      <ul
-        v-if="(suggestions.length && focused) || selectedIndex !== null"
-        ref="scroll"
-        class="fio-autocomplete--dropdown"
-      >
-        <li
-          v-for="(option, index) in suggestions"
-          :key="option.value"
-          ref="scrollItems"
-          :class="{ selected: selectedIndex === index }"
-          class="fio-autocomplete--dropdown--item"
-          @mouseleave="restoreOriginalValue"
-          @mousemove="selectedIndex = index"
-          @click.prevent="setValueBySelection"
-          v-text="[prefixValue, option.value, suffixValue].join(' ').trim()"
-        />
-      </ul>
+      <transition name="fio-dropdown-animation" mode="out-in">
+        <ul
+          v-if="(suggestions.length && focused) || selectedIndex !== null"
+          ref="scroll"
+          class="fio-autocomplete--dropdown"
+        >
+          <li
+            v-for="(option, index) in suggestions"
+            :key="option.value"
+            ref="scrollItems"
+            :class="{ selected: selectedIndex === index }"
+            class="fio-autocomplete--dropdown--item"
+            @mouseleave="restoreOriginalValue"
+            @mousemove="selectedIndex = index"
+            @click.prevent="setValueBySelection"
+            v-text="[prefixValue, option.value, suffixValue].join(' ').trim()"
+          />
+        </ul>
+      </transition>
     </div>
   </div>
 </template>

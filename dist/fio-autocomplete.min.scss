@@ -1,8 +1,7 @@
 $fs-input-text-color: black !default;
 $fs-placeholder-color: #999 !default;
-$fs-input-height: 35px !default;
 $fs-dropdown-bg-color: #fff !default;
-$fs-input-padding: 12px !default;
+$fs-list-padding: 12px !default;
 $fs-input-background: #fff !default;
 $fs-input-border: 1px solid #ddd !default;
 $fs-input-border-focused: 1px solid black !default;
@@ -20,8 +19,6 @@ $fs-input-border-focused: 1px solid black !default;
     display: flex;
     flex-direction: row;
     position: relative;
-    padding: 20px;
-    //min-height: $fs-input-height;
     border: $fs-input-border;
 
     &:focus-within {
@@ -31,30 +28,25 @@ $fs-input-border-focused: 1px solid black !default;
 
   &--sugg {
     position: absolute;
-    //min-height: $fs-input-height;
   }
 
   &--placeholder {
     white-space: nowrap;
     color: transparent;
-    //line-height: $fs-input-height;
   }
 
   &--mask {
     z-index: 0;
     white-space: nowrap;
     color: $fs-placeholder-color;
-    //line-height: $fs-input-height;
   }
 
   &--input {
     z-index: 1;
     width: 100%;
     text-transform: capitalize;
-    //line-height: $fs-input-height;
     background-color: transparent;
     appearance: none;
-    padding: 0 $fs-input-padding;
     box-sizing: border-box;
     font-family: inherit;
     font-size: inherit;
@@ -74,7 +66,6 @@ $fs-input-border-focused: 1px solid black !default;
     right: 0;
     z-index: 10;
     background-color: $fs-dropdown-bg-color;
-    //top: calc(8px + #{$fs-input-height});
     box-shadow: 0px 0px 2px black;
     border: 1px solid transparent;
     max-height: 200px;
@@ -84,7 +75,7 @@ $fs-input-border-focused: 1px solid black !default;
     margin: 0;
 
     &--item {
-      padding: $fs-input-padding;
+      padding: $fs-list-padding;
       cursor: pointer;
       background-color: #fff;
 

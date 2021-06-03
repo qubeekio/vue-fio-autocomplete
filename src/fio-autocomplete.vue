@@ -333,7 +333,6 @@ export default {
     },
 
     setInputValue({ target, data, key }) {
-      console.log([key])
       if (key !== " ") {
         this.predictStep({ target })
       }
@@ -371,7 +370,6 @@ export default {
           this.selectedIndex + 1 < length && this.selectedIndex !== null
             ? this.selectedIndex + 1
             : 0
-        console.log(this.selectedIndex)
         this.moveScrollBar()
       }
     },

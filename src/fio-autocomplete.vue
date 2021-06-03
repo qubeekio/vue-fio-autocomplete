@@ -30,7 +30,7 @@
       />
     </div>
     <div class="fio-autocomplete--dropdown-wrapper">
-      <transition name="fio-dropdown-animation" mode="out-in">
+      <transition name="fio-dropdown-animation">
         <ul
           v-if="(suggestions.length && focused) || selectedIndex !== null"
           ref="scroll"
@@ -43,7 +43,7 @@
             :class="{ selected: selectedIndex === index }"
             class="fio-autocomplete--dropdown--item"
             @mouseleave="restoreOriginalValue"
-            @mousemove="selectedIndex = index"
+            @mousemove="suggestions.length ? selectedIndex = index : false"
             @click.prevent="setValueBySelection"
             v-text="[prefixValue, option.value, suffixValue].join(' ').trim()"
           />

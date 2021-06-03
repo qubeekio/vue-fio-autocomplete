@@ -3834,7 +3834,6 @@ axios_1.default = _default;var axios = axios_1;var script = {
       var target = _ref2.target,
           data = _ref2.data,
           key = _ref2.key;
-      console.log([key]);
 
       if (key !== " ") {
         this.predictStep({
@@ -3869,7 +3868,6 @@ axios_1.default = _default;var axios = axios_1;var script = {
 
       if (length) {
         this.selectedIndex = this.selectedIndex + 1 < length && this.selectedIndex !== null ? this.selectedIndex + 1 : 0;
-        console.log(this.selectedIndex);
         this.moveScrollBar();
       }
     },
@@ -4028,8 +4026,7 @@ var __vue_render__ = function __vue_render__() {
     staticClass: "fio-autocomplete"
   }, [_vm._ssrNode("<div class=\"fio-autocomplete--wrapper\"><div class=\"fio-autocomplete--sugg\">" + (_vm.mask ? "<span class=\"fio-autocomplete--placeholder\">" + _vm._ssrEscape(_vm._s(_vm.prefixValue)) + "</span>" : "<!---->") + " <span class=\"fio-autocomplete--mask\">" + _vm._ssrEscape(_vm._s(' ' + _vm.mask)) + "</span></div> <input" + _vm._ssrAttr("autocomplete", _vm.context.autocomplete ? _vm.context.autocomplete : 'off') + _vm._ssrAttr("autocorrect", _vm.context.autocorrect ? _vm.context.autocorrect : 'off') + " autocapitalize=\"words\" type=\"text\"" + _vm._ssrAttr("value", _vm.inputValue) + " class=\"fio-autocomplete--input\"></div> "), _vm._ssrNode("<div class=\"fio-autocomplete--dropdown-wrapper\">", "</div>", [_c('transition', {
     attrs: {
-      "name": "fio-dropdown-animation",
-      "mode": "out-in"
+      "name": "fio-dropdown-animation"
     }
   }, [_vm.suggestions.length && _vm.focused || _vm.selectedIndex !== null ? _c('ul', {
     ref: "scroll",
@@ -4049,7 +4046,7 @@ var __vue_render__ = function __vue_render__() {
       on: {
         "mouseleave": _vm.restoreOriginalValue,
         "mousemove": function mousemove($event) {
-          _vm.selectedIndex = index;
+          _vm.suggestions.length ? _vm.selectedIndex = index : false;
         },
         "click": function click($event) {
           $event.preventDefault();
@@ -4069,7 +4066,7 @@ var __vue_inject_styles__ = undefined;
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-3233f31a";
+var __vue_module_identifier__ = "data-v-d4f06440";
 /* functional template */
 
 var __vue_is_functional_template__ = false;

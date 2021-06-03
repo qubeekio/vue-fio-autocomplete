@@ -3785,8 +3785,6 @@ var script = {
       data,
       key
     }) {
-      console.log([key]);
-
       if (key !== " ") {
         this.predictStep({
           target
@@ -3818,7 +3816,6 @@ var script = {
 
       if (length) {
         this.selectedIndex = this.selectedIndex + 1 < length && this.selectedIndex !== null ? this.selectedIndex + 1 : 0;
-        console.log(this.selectedIndex);
         this.moveScrollBar();
       }
     },
@@ -4072,8 +4069,7 @@ var __vue_render__ = function () {
     staticClass: "fio-autocomplete--dropdown-wrapper"
   }, [_c('transition', {
     attrs: {
-      "name": "fio-dropdown-animation",
-      "mode": "out-in"
+      "name": "fio-dropdown-animation"
     }
   }, [_vm.suggestions.length && _vm.focused || _vm.selectedIndex !== null ? _c('ul', {
     ref: "scroll",
@@ -4093,7 +4089,7 @@ var __vue_render__ = function () {
       on: {
         "mouseleave": _vm.restoreOriginalValue,
         "mousemove": function ($event) {
-          _vm.selectedIndex = index;
+          _vm.suggestions.length ? _vm.selectedIndex = index : false;
         },
         "click": function ($event) {
           $event.preventDefault();

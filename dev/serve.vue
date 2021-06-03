@@ -1,9 +1,9 @@
 <script>
-import Vue from 'vue'
-import FioAutocomplete from '@/fio-autocomplete.vue'
+import Vue from "vue"
+import FioAutocomplete from "@/fio-autocomplete.vue"
 
 export default Vue.extend({
-  name: 'ServeDev',
+  name: "ServeDev",
   components: {
     FioAutocomplete
   },
@@ -11,14 +11,14 @@ export default Vue.extend({
     return {
       options: {
         headers: {
-          Authorization: 'Token ' + process.env.TOKEN
+          Authorization: "Token " + process.env.TOKEN
         }
       },
       fio: {
-        surname: 'Иванов',
-        name: 'Иван',
-        patronymic: null,
-        gender: 'MALE'
+        surname: "Иванов",
+        name: "Иван",
+        patronymic: "Иванович",
+        gender: "MALE"
       }
     }
   }
@@ -29,8 +29,8 @@ export default Vue.extend({
   <div id="app">
     <fio-autocomplete
       v-model="fio"
-      api="https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fio"
       :request-options="options"
+      api="https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fio"
     />
   </div>
 </template>

@@ -1,0 +1,53 @@
+.fio-autocomplete {
+  position: relative; }
+  .fio-autocomplete--wrapper {
+    width: 100%;
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    min-height: 35px;
+    border: 1px solid #ddd; }
+    .fio-autocomplete--wrapper:focus-within {
+      border: 1px solid black; }
+  .fio-autocomplete--sugg {
+    padding: 0 12px; }
+  .fio-autocomplete--placeholder {
+    white-space: nowrap;
+    color: transparent;
+    line-height: 35px; }
+  .fio-autocomplete--mask {
+    white-space: nowrap;
+    color: #ddd;
+    line-height: 35px; }
+  .fio-autocomplete--input {
+    width: 100%;
+    position: absolute;
+    line-height: 35px;
+    background-color: transparent;
+    appearance: none;
+    padding: 0 12px;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit;
+    color: black;
+    outline: none;
+    border: none; }
+  .fio-autocomplete--dropdown {
+    position: absolute;
+    width: 100%;
+    background-color: #fff;
+    top: calc(8px + 35px);
+    box-shadow: 0px 0px 2px black;
+    border: 1px solid transparent;
+    max-height: 200px;
+    overflow-y: scroll;
+    list-style: none;
+    padding: 8px 0;
+    margin: 0; }
+    .fio-autocomplete--dropdown--item {
+      padding: 12px;
+      cursor: pointer;
+      background-color: #fff; }
+      .fio-autocomplete--dropdown--item.selected {
+        background-color: #ddd; }

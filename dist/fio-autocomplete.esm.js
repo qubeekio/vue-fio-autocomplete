@@ -3539,6 +3539,14 @@ var script = {
     value: {
       type: Object,
       default: () => {}
+    },
+    placeholder: {
+      type: String,
+      default: "Иванов Сергей Михайлович"
+    },
+    context: {
+      type: Object,
+      default: () => ({})
     }
   },
 
@@ -3550,38 +3558,59 @@ var script = {
         name: null,
         surname: null,
         patronymic: null,
-        gender: null,
-        qc: null
+        gender: null
       },
       canceller: axios.CancelToken.source(),
-      ignoreMissedValues: false,
       disableSearch: false,
-      selectedIndex: 0,
-      step: "surname",
+      selectedIndex: null,
       suggestions: [],
+      predictedStep: null,
+      caretPosition: 0,
       focused: false
     };
   },
 
   computed: {
+    fio() {
+      let {
+        surname,
+        name,
+        patronymic
+      } = this.data;
+      return [surname, name, patronymic].join(" ").trim();
+    },
+
+    fioParts() {
+      return this.toCapitalize(this.inputValue).split(" ");
+    },
+
+    prefixValue() {
+      return this.fioParts.slice(0, this.step - 1).join(" ").trim();
+    },
+
+    suffixValue() {
+      return this.fioParts.slice(this.step).join(" ").trim();
+    },
+
+    stepValue() {
+      return this.toCapitalize(this.step <= 2 ? this.fioParts[this.step - 1] : this.fioParts.slice(2).join(" "));
+    },
+
+    stepName() {
+      const step = this.step >= 3 ? 3 : this.step;
+      return ["surname", "name", "patronymic"][step - 1];
+    },
+
+    editingParts() {
+      return !(this.step === this.inputValue.split(" ", 3).length);
+    },
+
+    step() {
+      return !this.predictedStep ? this.inputValue.split(" ", 3).length : this.predictedStep;
+    },
+
     hasData() {
       return !!(this.data.surname || this.data.name || this.data.patronymic);
-    },
-
-    prefix() {
-      if (this.step === "name") {
-        return [this.data.surname].join(" ") + " ";
-      }
-
-      if (this.step === "patronymic") {
-        return [this.data.surname, this.data.name].join(" ") + " ";
-      }
-
-      return "";
-    },
-
-    fio() {
-      return [this.data.surname, this.data.name, this.data.patronymic].join(" ").trim();
     },
 
     selection() {
@@ -3592,28 +3621,18 @@ var script = {
       return null;
     },
 
-    stepValue() {
-      let value = this.inputValue;
-
-      if (this.step === "name" || this.step === "patronymic") {
-        value = value.replace(this.data.surname, "");
-
-        if (this.step === "patronymic") {
-          value = value.trimStart().replace(this.data.name, "");
-        }
+    mask() {
+      if (this.editingParts && this.stepValue.length > 0) {
+        return "";
       }
 
-      return value;
-    },
-
-    placeholder() {
       if (this.focused && this.inputValue) {
-        if (this.suggestions.length > 0 && this.suggestions[0].value.startsWith(this.stepValue.trim())) {
+        if (this.suggestions.length > 0 && this.suggestions[0].value.startsWith(this.stepValue.trim()) && this.inputValue.endsWith(this.stepValue.toLowerCase().trim())) {
           return this.suggestions[0].value;
         }
 
-        if (this.stepValue.endsWith(" ") && this.stepValue.length <= 1) {
-          switch (this.step) {
+        if (!this.stepValue) {
+          switch (this.stepName) {
             case "name":
               return "Имя Отчество";
 
@@ -3632,67 +3651,55 @@ var script = {
         return "";
       }
 
-      return "Иванов Сергей Михайлович";
+      return this.placeholder;
     }
 
   },
   watch: {
-    inputValue(newVal, oldVal) {
-      this.inputValue = this.inputValue.replaceAll("  ", " "); // When user cleared whole input value.
-
-      if (this.inputValue === "") {
-        this.step = "surname";
-        this.data = {
-          name: null,
-          surname: null,
-          patronymic: null,
-          gender: null,
-          qc: null
-        };
-        return;
-      }
-
-      if (!this.originalValue) {
-        // Calculate difference between new and old values.
-        let diff = Math.abs(oldVal.length - (newVal ? newVal.length : 0));
-
-        if (diff !== 0) {
-          // When user decided to delete something more than 1 char.
-          let oldChunks = oldVal.split(" ").filter(i => i.length > 0);
-          let newChunks = newVal.split(" ").filter(i => i.length > 0);
-
-          if (diff > 1 || oldChunks.length !== newChunks.length) {
-            this.inputValue = this.inputValue.trim();
-            let steps = ["surname", "name", "patronymic"];
-            steps.forEach((step, i) => {
-              if (newChunks[i]) {
-                this.data[step] = typeof newChunks[i + 1] !== "undefined" || this.ignoreMissedValues ? newChunks[i] : null;
-                this.step = step;
-              } else {
-                this.data[step] = null;
-              }
-            });
-            this.$nextTick(async () => {
-              await this.loadSuggestions();
-            });
-          } else {
-            // If user delete only one char it's not a problem for us.
-            this.unsetValue();
-          }
-        }
-      }
-
-      this.$emit("input", this.data);
-    },
-
     selectedIndex() {
       if (this.selection) {
         if (!this.originalValue) {
           this.originalValue = this.inputValue;
         }
 
-        this.inputValue = (this.prefix + this.selection.value).trim();
+        this.inputValue = [this.prefixValue, this.selection.value, this.suffixValue].join(" ").trim();
       }
+    },
+
+    step() {
+      this.suggestions = [];
+    },
+
+    fioParts() {
+      if (this.fioParts.length <= 1) {
+        this.data.gender = null;
+      }
+
+      let filtered = this.fioParts.filter(Boolean);
+      if (filtered.length !== this.fioParts.length) this.inputValue = this.inputValue.trimStart();
+    },
+
+    inputValue() {
+      this.inputValue = this.inputValue.replace("  ", " ");
+      this.inputValue = this.inputValue.replace(".", "");
+      let [surname, name, patronymic, ...parts] = this.toCapitalize(this.inputValue).split(" "); // When user cleared whole input value.
+
+      if (this.inputValue === "") {
+        this.predictedStep = null;
+        this.data = {
+          name: null,
+          surname: null,
+          patronymic: null,
+          gender: null
+        };
+        return;
+      }
+
+      this.data = { ...this.data,
+        surname,
+        name,
+        patronymic: [patronymic, ...parts].join(" ")
+      };
     }
 
   },
@@ -3701,15 +3708,70 @@ var script = {
     this.data = { ...this.data,
       ...this.value
     };
-    this.ignoreMissedValues = true;
     this.disableSearch = true;
-    this.inputValue = this.fio;
-    this.$nextTick(() => {
-      this.ignoreMissedValues = false;
-    });
+    this.inputValue = this.fio.toLowerCase();
   },
 
   methods: {
+    toCapitalize(str = "") {
+      return str.replace(/[А-Яа-яЁёA-Za-z]\S*/g, w => w.replace(/^[A-Za-zА-Яа-яЁё]/, c => c.toUpperCase()));
+    },
+
+    setNextStep(e) {
+      if (this.stepValue.length === 0) {
+        e.preventDefault();
+      }
+
+      if (this.editingParts && this.prefixValue.length + this.stepValue.length === this.caretPosition - 1) {
+        this.$refs.input.setSelectionRange(this.caretPosition + 1, this.caretPosition + 1);
+        this.predictStep(e, 1);
+        e.preventDefault();
+      }
+
+      if (this.stepValue) {
+        // Trim spaces if user decide to use more that one.
+        this.inputValue = this.inputValue.trim(); // Clear selections.
+
+        this.selectedIndex = null;
+        this.originalValue = null; // If suggestion is the same as value - add gender.
+
+        if (this.suggestions.length > 0 && this.suggestions[0].value === this.stepValue) {
+          this.setGender(this.suggestions[0].data.gender);
+        } // Clean suggestions.
+
+
+        this.suggestions = []; // Predict new step.
+
+        this.predictStep(e, 1); // Load only if we have only one part in patronymic.
+
+        if (this.stepName !== "patronymic" && this.stepValue && !this.stepValue.endsWith(" ")) this.loadSuggestions();
+      }
+    },
+
+    onFocus() {
+      this.focused = true;
+    },
+
+    afterFocus() {
+      this.focused = false;
+      this.$nextTick(() => {
+        this.$emit("input", this.data);
+      });
+    },
+
+    predictStep({
+      target
+    }, offset = 0) {
+      // When user pressed right arrow with empty space
+      if (offset === 1 && !this.stepValue) return;
+      if (offset === 1 && this.inputValue === this.prefixValue) this.inputValue += " ";
+      if (target.selectionStart === target.selectionEnd) this.caretPosition = target.selectionStart + offset;
+      const [surname, name] = target.value.split(" ", 2);
+      const surnameLength = surname ? surname.length : 0;
+      const nameLength = name ? name.length : 0;
+      if (this.caretPosition >= 0 && this.caretPosition <= surnameLength) this.predictedStep = 1;else if (this.caretPosition >= surnameLength && this.caretPosition <= surnameLength + nameLength + 1) this.predictedStep = 2;else this.predictedStep = 3;
+    },
+
     restoreOriginalValue() {
       if (this.originalValue) {
         this.inputValue = this.originalValue;
@@ -3720,29 +3782,24 @@ var script = {
 
     setInputValue({
       target,
-      data
+      data,
+      key
     }) {
-      this.inputValue = target.value;
-      this.inputValue = this.inputValue.toLowerCase().replace(/[А-Яа-яЁёA-Za-z]\S*/g, w => w.replace(/^[A-Za-zА-Яа-яЁё]/, c => c.toUpperCase()));
+      console.log([key]);
+
+      if (key !== " ") {
+        this.predictStep({
+          target
+        });
+      }
+
+      this.inputValue = target.value.toLowerCase().replace(/[^\p{L}\p{N}\p{P}\p{Z}]/gu, "").replace(/-[А-Яа-яЁёA-Za-z]\S*/g, w => w.replace(/^-[A-Za-zА-Яа-яЁё]/, c => c.toUpperCase()));
       this.disableSearch = !/[А-Яа-яЁё_-]/.test(data) && data !== null;
 
       if (!/[A-Za-zА-Яа-яЁё_-]/.test(data) && data !== null && data !== " ") {
         this.inputValue = this.inputValue.slice(0, -1);
       } else {
         this.loadSuggestions();
-      }
-    },
-
-    setNextStep() {
-      if (this.stepValue.trim().length === 0) {
-        return;
-      }
-
-      this.originalValue = null;
-      this.setValue();
-
-      if (this.step === "patronymic") {
-        this.inputValue += " ";
       }
     },
 
@@ -3757,108 +3814,52 @@ var script = {
     },
 
     increment() {
-      if (this.suggestions.length) {
-        const length = this.suggestions.length;
+      const length = this.suggestions.length;
 
-        if (this.selectedIndex + 1 < length) {
-          this.selectedIndex++;
-        } else {
-          this.selectedIndex = 0;
-        }
-
+      if (length) {
+        this.selectedIndex = this.selectedIndex + 1 < length && this.selectedIndex !== null ? this.selectedIndex + 1 : 0;
+        console.log(this.selectedIndex);
         this.moveScrollBar();
       }
     },
 
     decrement() {
-      if (this.suggestions.length) {
-        const length = this.suggestions.length;
+      const length = this.suggestions.length;
 
-        if (this.selectedIndex - 1 >= 0) {
-          this.selectedIndex--;
-        } else {
-          this.selectedIndex = length - 1;
-        }
-
+      if (length) {
+        this.selectedIndex = this.selectedIndex - 1 >= 0 ? this.selectedIndex - 1 : length - 1;
         this.moveScrollBar();
       }
     },
 
+    setGender(gender) {
+      if (gender === "UNKNOWN" && this.data.gender !== "UNKNOWN") return;
+      this.data.gender = gender;
+    },
+
     setValueBySelection() {
       this.$refs.input.focus();
-      this.setValue(this.selection);
-    },
+      let parts = this.fioParts;
+      parts.splice(this.step - 1, 1, this.selection.value);
+      this.setGender(this.selection.data.gender);
+      this.inputValue = parts.join(" ").trim();
+      this.caretPosition = this.inputValue.length + 1; // Clear selections.
 
-    onFocus() {
-      if (!this.selection) {
-        this.data[this.step] = null;
-        this.focused = true;
-        this.loadSuggestions();
-      }
-    },
-
-    afterFocus() {
-      if (!this.selectedIndex) {
-        this.focused = false;
-        this.setValue(null, false);
-      }
-    },
-
-    chooseNextStep() {
-      if (this.step === "surname") return "name";
-      if (this.step === "name") return "patronymic";
-      if (this.step === undefined) return "surname";
-    },
-
-    choosePreviousStep() {
-      if (this.step === "name") return "surname";
-      if (this.step === "patronymic") return "name";
-      if (this.step === undefined) return "patronymic";
-      return "surname";
-    },
-
-    setValue(selection = null, setNextStep = true) {
-      this.originalValue = null;
       this.selectedIndex = null;
+      this.originalValue = null;
+      if (this.stepName === "patronymic") this.$refs.input.blur(); // Clean suggestions.
 
-      if (selection) {
-        this.data[this.step] = selection.value;
-        this.data.gender = selection.data.gender;
-        this.data.qc = selection.data.qc;
-      } else {
-        if (this.suggestions.length > 0 && this.suggestions[0].value === this.stepValue.trim()) {
-          this.setValue(this.suggestions[0]);
-          return;
-        }
+      this.suggestions = []; // Insert dummy space.
 
-        this.data[this.step] = this.stepValue.trim();
-      }
+      this.inputValue += " "; // Predict new step.
 
-      this.suggestions = [];
-
-      if (setNextStep) {
-        this.inputValue = this.fio;
-
-        if (this.step !== "patronymic") {
-          this.step = this.chooseNextStep();
-          this.inputValue += " ";
-          this.$refs.input.focus();
-          this.focused = true;
-        }
-      }
-    },
-
-    unsetValue() {
-      this.data[this.step] = null;
-
-      if (!this.stepValue) {
-        this.step = this.choosePreviousStep();
-        this.data[this.step] = null;
-
-        if (this.step === "name") {
-          this.data.gender = null;
-        }
-      }
+      this.predictStep({
+        target: this.$refs.input
+      }, 1);
+      this.$nextTick(() => {
+        // Load only if we have only one part in patronymic.
+        if (this.stepName !== "patronymic" && !this.stepValue.endsWith(" ")) this.loadSuggestions();
+      });
     },
 
     loadSuggestions() {
@@ -3869,14 +3870,15 @@ var script = {
 
 
       this.canceller = axios.CancelToken.source();
+      const step = this.stepName;
       !this.disableSearch ? axios.request({
         method: "POST",
         cancelToken: this.canceller.token,
         url: this.api,
         data: {
-          query: this.stepValue,
+          query: this.stepValue.trim(),
           gender: this.data.gender,
-          parts: [this.step ? this.step.toUpperCase() : this.hasData ? "PATRONYMIC" : "SURNAME"]
+          parts: [step ? step.toUpperCase() : this.hasData ? "PATRONYMIC" : "SURNAME"]
         },
         ...this.requestOptions
       }).then(({
@@ -3988,39 +3990,55 @@ var __vue_render__ = function () {
     }
   }, [_c('div', {
     staticClass: "fio-autocomplete--sugg"
-  }, [_vm.placeholder ? _c('span', {
+  }, [_vm.mask ? _c('span', {
     staticClass: "fio-autocomplete--placeholder",
     domProps: {
-      "textContent": _vm._s(_vm.fio)
+      "textContent": _vm._s(_vm.prefixValue)
     }
   }) : _vm._e(), _vm._v(" "), _c('span', {
     staticClass: "fio-autocomplete--mask",
     domProps: {
-      "textContent": _vm._s(' ' + _vm.placeholder)
+      "textContent": _vm._s(' ' + _vm.mask)
     }
   })]), _vm._v(" "), _c('input', {
     ref: "input",
     staticClass: "fio-autocomplete--input",
     attrs: {
-      "autocapitalize": "off",
-      "autocomplete": "off",
-      "autocorrect": "off",
+      "autocomplete": _vm.context.autocomplete ? _vm.context.autocomplete : 'off',
+      "autocorrect": _vm.context.autocorrect ? _vm.context.autocorrect : 'off',
+      "autocapitalize": "words",
       "type": "text"
     },
     domProps: {
       "value": _vm.inputValue
     },
     on: {
-      "blur": _vm.afterFocus,
-      "focusin": _vm.onFocus,
+      "click": function ($event) {
+        return _vm.predictStep($event);
+      },
+      "focus": _vm.onFocus,
+      "focusout": _vm.afterFocus,
       "input": _vm.setInputValue,
       "keydown": [function ($event) {
-        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) {
+        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "left", 37, $event.key, ["Left", "ArrowLeft"])) {
           return null;
         }
 
-        $event.preventDefault();
-        return _vm.setValue(_vm.selection);
+        if ('button' in $event && $event.button !== 0) {
+          return null;
+        }
+
+        return _vm.predictStep($event, -1);
+      }, function ($event) {
+        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "right", 39, $event.key, ["Right", "ArrowRight"])) {
+          return null;
+        }
+
+        if ('button' in $event && $event.button !== 2) {
+          return null;
+        }
+
+        return _vm.predictStep($event, 1);
       }, function ($event) {
         if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "down", 40, $event.key, ["Down", "ArrowDown"])) {
           return null;
@@ -4035,22 +4053,26 @@ var __vue_render__ = function () {
 
         $event.preventDefault();
         return _vm.decrement($event);
-      }],
-      "keyup": function ($event) {
+      }, function ($event) {
         if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "space", 32, $event.key, [" ", "Spacebar"])) {
           return null;
         }
 
-        $event.preventDefault();
         return _vm.setNextStep($event);
-      }
+      }, function ($event) {
+        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) {
+          return null;
+        }
+
+        $event.preventDefault();
+        return _vm.setValueBySelection($event);
+      }]
     }
-  })]), _vm._v(" "), _vm.suggestions.length && _vm.focused ? _c('ul', {
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "fio-autocomplete--dropdown-wrapper"
+  }, [_vm.suggestions.length && _vm.focused || _vm.selectedIndex !== null ? _c('ul', {
     ref: "scroll",
-    staticClass: "fio-autocomplete--dropdown",
-    on: {
-      "mouseleave": _vm.restoreOriginalValue
-    }
+    staticClass: "fio-autocomplete--dropdown"
   }, _vm._l(_vm.suggestions, function (option, index) {
     return _c('li', {
       key: option.value,
@@ -4061,16 +4083,20 @@ var __vue_render__ = function () {
         selected: _vm.selectedIndex === index
       },
       domProps: {
-        "textContent": _vm._s(_vm.prefix + option.value)
+        "textContent": _vm._s([_vm.prefixValue, option.value, _vm.suffixValue].join(' ').trim())
       },
       on: {
-        "click": _vm.setValueBySelection,
+        "mouseleave": _vm.restoreOriginalValue,
         "mousemove": function ($event) {
           _vm.selectedIndex = index;
+        },
+        "click": function ($event) {
+          $event.preventDefault();
+          return _vm.setValueBySelection($event);
         }
       }
     });
-  }), 0) : _vm._e()]);
+  }), 0) : _vm._e()])]);
 };
 
 var __vue_staticRenderFns__ = [];

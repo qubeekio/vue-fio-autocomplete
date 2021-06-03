@@ -1,5 +1,5 @@
 $fs-input-text-color: black !default;
-$fs-placeholder-color: #ddd !default;
+$fs-placeholder-color: #999 !default;
 $fs-input-height: 35px !default;
 $fs-dropdown-bg-color: #fff !default;
 $fs-input-padding: 12px !default;
@@ -9,36 +9,49 @@ $fs-input-border-focused: 1px solid black !default;
 
 .fio-autocomplete {
   position: relative;
+
+  input {
+    padding: 0;
+    margin: 0;
+  }
+
   &--wrapper {
-    width: 100%;
     background-color: $fs-input-background;
     display: flex;
     flex-direction: row;
     position: relative;
-    min-height: $fs-input-height;
+    padding: 20px;
+    //min-height: $fs-input-height;
     border: $fs-input-border;
+
     &:focus-within {
       border: $fs-input-border-focused;
     }
   }
+
   &--sugg {
-    padding: 0 $fs-input-padding;
-    min-height: $fs-input-height;
+    position: absolute;
+    //min-height: $fs-input-height;
   }
+
   &--placeholder {
     white-space: nowrap;
     color: transparent;
-    line-height: $fs-input-height;
+    //line-height: $fs-input-height;
   }
+
   &--mask {
+    z-index: 0;
     white-space: nowrap;
     color: $fs-placeholder-color;
-    line-height: $fs-input-height;
+    //line-height: $fs-input-height;
   }
+
   &--input {
+    z-index: 1;
     width: 100%;
-    position: absolute;
-    line-height: $fs-input-height;
+    text-transform: capitalize;
+    //line-height: $fs-input-height;
     background-color: transparent;
     appearance: none;
     padding: 0 $fs-input-padding;
@@ -49,11 +62,19 @@ $fs-input-border-focused: 1px solid black !default;
     outline: none;
     border: none;
   }
+
   &--dropdown {
+    &-wrapper {
+      position: relative;
+    }
+
     position: absolute;
-    width: 100%;
+    top: 8px;
+    left: 0;
+    right: 0;
+    z-index: 10;
     background-color: $fs-dropdown-bg-color;
-    top: calc(8px + #{$fs-input-height});
+    //top: calc(8px + #{$fs-input-height});
     box-shadow: 0px 0px 2px black;
     border: 1px solid transparent;
     max-height: 200px;
@@ -61,10 +82,12 @@ $fs-input-border-focused: 1px solid black !default;
     list-style: none;
     padding: 8px 0;
     margin: 0;
+
     &--item {
       padding: $fs-input-padding;
       cursor: pointer;
       background-color: #fff;
+
       &.selected {
         background-color: #ddd;
       }

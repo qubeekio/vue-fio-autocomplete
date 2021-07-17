@@ -24,12 +24,22 @@ import FioAutocomplete from "@qubeekio/vue-fio-autocomplete"
 
 ...
 
-<fio-autocomplete
-      v-model="fio"
-      :request-options="options"
-      api="https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fio"
-    />
-})
+methods: {
+  async fetch(data) {
+    return await axios.request({
+      method: 'POST',
+      url: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fio',
+      headers: {
+        Authorization: 'Token ' + 'Your token'
+      },
+      data
+    })
+  }
+}
+
+...
+
+<fio-autocomplete-field v-model="fio" :load-using="fetch" />
 
 ```
 

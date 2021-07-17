@@ -3888,8 +3888,12 @@ axios_1.default = _default;var axios = axios_1;var script = {
 
       this.$refs.input.focus();
       var parts = this.fioParts;
-      parts.splice(this.step - 1, 1, this.selection.value);
-      this.setGender(this.selection.data.gender);
+
+      if (this.selection) {
+        parts.splice(this.step - 1, 1, this.selection.value);
+        this.setGender(this.selection.data.gender);
+      }
+
       this.inputValue = parts.join(" ").trim();
       this.caretPosition = this.inputValue.length + 1; // Clear selections.
 
@@ -4066,7 +4070,7 @@ var __vue_inject_styles__ = undefined;
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-d4f06440";
+var __vue_module_identifier__ = "data-v-66521c11";
 /* functional template */
 
 var __vue_is_functional_template__ = false;

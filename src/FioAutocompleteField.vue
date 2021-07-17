@@ -43,7 +43,7 @@
             :class="{ selected: selectedIndex === index }"
             class="fio-autocomplete--dropdown--item"
             @mouseleave="restoreOriginalValue"
-            @mousemove="suggestions.length ? selectedIndex = index : false"
+            @mousemove="suggestions.length ? (selectedIndex = index) : false"
             @click.prevent="setValueBySelection"
             v-text="[prefixValue, option.value, suffixValue].join(' ').trim()"
           />
@@ -54,19 +54,14 @@
 </template>
 
 <script>
-import "./styles/main.scss"
-import axios from "axios"
+import '../styles/main.scss'
 
 export default {
-  name: "FioAutocomplete", // vue component name
+  name: 'FioAutocomplete', // vue component name
   props: {
-    api: {
-      type: String,
+    loadUsing: {
+      type: Function,
       required: true
-    },
-    requestOptions: {
-      type: Object,
-      default: () => {}
     },
     value: {
       type: Object,
@@ -74,7 +69,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: "Иванов Сергей Михайлович"
+      default: 'Иванов Сергей Михайлович'
     },
     context: {
       type: Object,
@@ -83,7 +78,7 @@ export default {
   },
   data() {
     return {
-      inputValue: "",
+      inputValue: '',
       originalValue: null,
       data: {
         name: null,
@@ -91,7 +86,6 @@ export default {
         patronymic: null,
         gender: null
       },
-      canceller: axios.CancelToken.source(),
       disableSearch: false,
       selectedIndex: null,
       suggestions: [],
@@ -103,37 +97,37 @@ export default {
   computed: {
     fio() {
       let { surname, name, patronymic } = this.data
-      return [surname, name, patronymic].join(" ").trim()
+      return [surname, name, patronymic].join(' ').trim()
     },
     fioParts() {
-      return this.toCapitalize(this.inputValue).split(" ")
+      return this.toCapitalize(this.inputValue).split(' ')
     },
     prefixValue() {
       return this.fioParts
         .slice(0, this.step - 1)
-        .join(" ")
+        .join(' ')
         .trim()
     },
     suffixValue() {
-      return this.fioParts.slice(this.step).join(" ").trim()
+      return this.fioParts.slice(this.step).join(' ').trim()
     },
     stepValue() {
       return this.toCapitalize(
         this.step <= 2
           ? this.fioParts[this.step - 1]
-          : this.fioParts.slice(2).join(" ")
+          : this.fioParts.slice(2).join(' ')
       )
     },
     stepName() {
       const step = this.step >= 3 ? 3 : this.step
-      return ["surname", "name", "patronymic"][step - 1]
+      return ['surname', 'name', 'patronymic'][step - 1]
     },
     editingParts() {
-      return !(this.step === this.inputValue.split(" ", 3).length)
+      return !(this.step === this.inputValue.split(' ', 3).length)
     },
     step() {
       return !this.predictedStep
-        ? this.inputValue.split(" ", 3).length
+        ? this.inputValue.split(' ', 3).length
         : this.predictedStep
     },
     hasData() {
@@ -147,7 +141,7 @@ export default {
     },
     mask() {
       if (this.editingParts && this.stepValue.length > 0) {
-        return ""
+        return ''
       }
 
       if (this.focused && this.inputValue) {
@@ -161,19 +155,19 @@ export default {
 
         if (!this.stepValue) {
           switch (this.stepName) {
-            case "name":
-              return "Имя Отчество"
-            case "patronymic":
-              return "Отчество"
+            case 'name':
+              return 'Имя Отчество'
+            case 'patronymic':
+              return 'Отчество'
             case undefined:
-              return ""
+              return ''
           }
         }
 
-        return ""
+        return ''
       }
       if (this.hasData) {
-        return ""
+        return ''
       }
 
       return this.placeholder
@@ -190,7 +184,7 @@ export default {
           this.selection.value,
           this.suffixValue
         ]
-          .join(" ")
+          .join(' ')
           .trim()
       }
     },
@@ -207,15 +201,15 @@ export default {
         this.inputValue = this.inputValue.trimStart()
     },
     inputValue() {
-      this.inputValue = this.inputValue.replace("  ", " ")
-      this.inputValue = this.inputValue.replace(".", "")
+      this.inputValue = this.inputValue.replace('  ', ' ')
+      this.inputValue = this.inputValue.replace('.', '')
 
       let [surname, name, patronymic, ...parts] = this.toCapitalize(
         this.inputValue
-      ).split(" ")
+      ).split(' ')
 
       // When user cleared whole input value.
-      if (this.inputValue === "") {
+      if (this.inputValue === '') {
         this.predictedStep = null
         this.data = {
           name: null,
@@ -231,7 +225,7 @@ export default {
         ...this.data,
         surname,
         name,
-        patronymic: [patronymic, ...parts].join(" ")
+        patronymic: [patronymic, ...parts].join(' ')
       }
     }
   },
@@ -241,7 +235,7 @@ export default {
     this.inputValue = this.fio.toLowerCase()
   },
   methods: {
-    toCapitalize(str = "") {
+    toCapitalize(str = '') {
       return str.replace(/[А-Яа-яЁёA-Za-z]\S*/g, (w) =>
         w.replace(/^[A-Za-zА-Яа-яЁё]/, (c) => c.toUpperCase())
       )
@@ -283,9 +277,9 @@ export default {
         this.predictStep(e, 1)
         // Load only if we have only one part in patronymic.
         if (
-          this.stepName !== "patronymic" &&
+          this.stepName !== 'patronymic' &&
           this.stepValue &&
-          !this.stepValue.endsWith(" ")
+          !this.stepValue.endsWith(' ')
         )
           this.loadSuggestions()
       }
@@ -296,7 +290,7 @@ export default {
     afterFocus() {
       this.focused = false
       this.$nextTick(() => {
-        this.$emit("input", this.data)
+        this.$emit('input', this.data)
       })
     },
     predictStep({ target }, offset = 0) {
@@ -304,12 +298,12 @@ export default {
       if (offset === 1 && !this.stepValue) return
 
       if (offset === 1 && this.inputValue === this.prefixValue)
-        this.inputValue += " "
+        this.inputValue += ' '
 
       if (target.selectionStart === target.selectionEnd)
         this.caretPosition = target.selectionStart + offset
 
-      const [surname, name] = target.value.split(" ", 2)
+      const [surname, name] = target.value.split(' ', 2)
 
       const surnameLength = surname ? surname.length : 0
       const nameLength = name ? name.length : 0
@@ -333,20 +327,20 @@ export default {
     },
 
     setInputValue({ target, data, key }) {
-      if (key !== " ") {
+      if (key !== ' ') {
         this.predictStep({ target })
       }
 
       this.inputValue = target.value
         .toLowerCase()
-        .replace(/[^\p{L}\p{N}\p{P}\p{Z}]/gu, "")
+        .replace(/[^\p{L}\p{N}\p{P}\p{Z}]/gu, '')
         .replace(/-[А-Яа-яЁёA-Za-z]\S*/g, (w) =>
           w.replace(/^-[A-Za-zА-Яа-яЁё]/, (c) => c.toUpperCase())
         )
 
       this.disableSearch = !/[А-Яа-яЁё_-]/.test(data) && data !== null
 
-      if (!/[A-Za-zА-Яа-яЁё_-]/.test(data) && data !== null && data !== " ") {
+      if (!/[A-Za-zА-Яа-яЁё_-]/.test(data) && data !== null && data !== ' ') {
         this.inputValue = this.inputValue.slice(0, -1)
       } else {
         this.loadSuggestions()
@@ -384,7 +378,7 @@ export default {
     },
 
     setGender(gender) {
-      if (gender === "UNKNOWN" && this.data.gender !== "UNKNOWN") return
+      if (gender === 'UNKNOWN' && this.data.gender !== 'UNKNOWN') return
 
       this.data.gender = gender
     },
@@ -392,67 +386,55 @@ export default {
     setValueBySelection() {
       this.$refs.input.focus()
       let parts = this.fioParts
-      parts.splice(this.step - 1, 1, this.selection.value)
-      this.setGender(this.selection.data.gender)
+      if (this.selection) {
+        parts.splice(this.step - 1, 1, this.selection.value)
+        this.setGender(this.selection.data.gender)
+      }
 
-      this.inputValue = parts.join(" ").trim()
+      this.inputValue = parts.join(' ').trim()
       this.caretPosition = this.inputValue.length + 1
 
       // Clear selections.
       this.selectedIndex = null
       this.originalValue = null
 
-      if (this.stepName === "patronymic") this.$refs.input.blur()
+      if (this.stepName === 'patronymic') this.$refs.input.blur()
 
       // Clean suggestions.
       this.suggestions = []
       // Insert dummy space.
-      this.inputValue += " "
+      this.inputValue += ' '
 
       // Predict new step.
       this.predictStep({ target: this.$refs.input }, 1)
 
       this.$nextTick(() => {
         // Load only if we have only one part in patronymic.
-        if (this.stepName !== "patronymic" && !this.stepValue.endsWith(" "))
+        if (this.stepName !== 'patronymic' && !this.stepValue.endsWith(' '))
           this.loadSuggestions()
       })
     },
 
     loadSuggestions() {
-      // Check if there are any previous pending requests
-      if (typeof this.canceller !== typeof undefined) {
-        this.canceller.cancel("Operation canceled due to new request.")
-      }
-
       // Save the cancel token for the current request
-      this.canceller = axios.CancelToken.source()
       const step = this.stepName
 
       !this.disableSearch
-        ? axios
-            .request({
-              method: "POST",
-              cancelToken: this.canceller.token,
-              url: this.api,
-              data: {
-                query: this.stepValue.trim(),
-                gender: this.data.gender,
-                parts: [
-                  step
-                    ? step.toUpperCase()
-                    : this.hasData
-                    ? "PATRONYMIC"
-                    : "SURNAME"
-                ]
-              },
-              ...this.requestOptions
-            })
-            .then(({ data }) => {
-              this.selectedIndex = null
-              this.suggestions = data.suggestions
-              this.$forceUpdate()
-            })
+        ? this.loadUsing({
+            query: this.stepValue.trim(),
+            gender: this.data.gender,
+            parts: [
+              step
+                ? step.toUpperCase()
+                : this.hasData
+                ? 'PATRONYMIC'
+                : 'SURNAME'
+            ]
+          }).then(({ data }) => {
+            this.selectedIndex = null
+            this.suggestions = data.suggestions
+            this.$forceUpdate()
+          })
         : null
     }
   }

@@ -3837,8 +3837,12 @@ var script = {
     setValueBySelection() {
       this.$refs.input.focus();
       let parts = this.fioParts;
-      parts.splice(this.step - 1, 1, this.selection.value);
-      this.setGender(this.selection.data.gender);
+
+      if (this.selection) {
+        parts.splice(this.step - 1, 1, this.selection.value);
+        this.setGender(this.selection.data.gender);
+      }
+
       this.inputValue = parts.join(" ").trim();
       this.caretPosition = this.inputValue.length + 1; // Clear selections.
 

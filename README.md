@@ -2,13 +2,11 @@
 ![](https://github.styleci.io/repos/371502967/shield?branch=master)
 ![MIT License](https://img.shields.io/github/license/qubeekio/vue-fio-autocomplete.svg?style=flat-square)
 
-> **Simple and lightweight package, that just works**
-
+> **Simple and lightweight package, that helps with russian fio**
 
 An input field that helps users fill in their full name faster and more correctly. 
 Fully customizable and ready for production, just change styles, and let's rock. 
 It works with [dadata.ru](https://dadata.ru) or your own custom service.
-
 
 ## Usage
 
@@ -49,12 +47,12 @@ fio: {
 
 ### Styles
 
-The component itself does not include any CSS. You'll need to include it separately via SCSS. 
+The component includes SCSS. 
 
 You can find [list of SCSS variables here](https://github.com/qubeekio/vue-fio-autocomplete/blob/master/src/styles/main.scss).
 
 ```scss
-@import "@qubeekio/vue-fio-autocomplete/src/styles/main.scss";
+@import "@qubeekio/vue-fio-autocomplete/styles/main.scss";
 ```
 
 ## Estimated response from the server

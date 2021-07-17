@@ -1,7 +1,8 @@
 {
   "name": "@qubeekio/vue-fio-autocomplete",
-  "version": "1.1.1",
-  "description": "",
+  "version": "2.0.0",
+  "description": "Simple and lightweight package, that helps with russian fio",
+  "repository": "https://github.com/qubeekio/vue-fio-autocomplete",
   "scripts": {
     "serve": "cross-env vue-cli-service serve dev/serve.js",
     "build": "cross-env NODE_ENV=production rollup --config build/rollup.config.js",
@@ -31,6 +32,7 @@
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "^4.5.10",
     "@vue/eslint-config-prettier": "^6.0.0",
+    "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
     "cross-env": "^7.0.3",
     "eslint": "^7.27.0",
@@ -54,8 +56,5 @@
   "engines": {
     "node": ">=12"
   },
-  "sideEffects": false,
-  "dependencies": {
-    "axios": "^0.21.1"
-  }
+  "sideEffects": false
 }

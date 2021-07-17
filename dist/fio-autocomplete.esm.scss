@@ -3,6 +3,7 @@ $fs-placeholder-color: #999 !default;
 $fs-dropdown-bg-color: #fff !default;
 $fs-list-padding: 12px !default;
 $fs-input-background: #fff !default;
+$fs-input-padding: 10px;
 $fs-input-border: 1px solid #ddd !default;
 $fs-input-border-focused: 1px solid black !default;
 
@@ -10,7 +11,7 @@ $fs-input-border-focused: 1px solid black !default;
   position: relative;
 
   input {
-    padding: 0;
+    padding: $fs-input-padding;
     margin: 0;
   }
 
@@ -28,6 +29,7 @@ $fs-input-border-focused: 1px solid black !default;
 
   &--sugg {
     position: absolute;
+    padding: $fs-input-padding;
   }
 
   &--placeholder {

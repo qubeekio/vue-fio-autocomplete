@@ -340,11 +340,9 @@ var script = {
         query: this.stepValue.trim(),
         gender: this.data.gender,
         parts: [step ? step.toUpperCase() : this.hasData ? 'PATRONYMIC' : 'SURNAME']
-      }).then(({
-        data
-      }) => {
+      }).then(data => {
         this.selectedIndex = null;
-        this.suggestions = data.suggestions;
+        this.suggestions = data;
         this.$forceUpdate();
       }) : null;
     }

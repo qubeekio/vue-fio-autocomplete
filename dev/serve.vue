@@ -1,9 +1,8 @@
 <script>
-import Vue from 'vue'
 import '../styles/main.scss'
 import axios from 'axios'
 
-export default Vue.extend({
+export default {
   name: 'ServeDev',
   data() {
     return {
@@ -17,17 +16,21 @@ export default Vue.extend({
   },
   methods: {
     async fetch(data) {
-      return await axios.request({
-        method: 'POST',
-        url: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fio',
-        headers: {
-          Authorization: 'Token ' + 'Your token'
-        },
-        data
-      })
+      return await axios
+        .request({
+          method: 'POST',
+          url: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fio',
+          headers: {
+            Authorization: 'Token ' + 'Your token'
+          },
+          data
+        })
+        .then(({ data }) => {
+          return data.suggestions
+        })
     }
   }
-})
+}
 </script>
 
 <template>

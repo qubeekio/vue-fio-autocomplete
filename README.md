@@ -26,20 +26,27 @@ import FioAutocomplete from "@qubeekio/vue-fio-autocomplete"
 
 methods: {
   async fetch(data) {
-    return await axios.request({
-      method: 'POST',
-      url: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fio',
-      headers: {
-        Authorization: 'Token ' + 'Your token'
-      },
-      data
-    })
+    return await axios
+      .request({
+        method: 'POST',
+        url: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fio',
+        headers: {
+          Authorization: 'Token ' + 'Your token'
+        },
+        data
+      })
+      .then(({ data }) => {
+        return data.suggestions
+      })
   }
 }
 
 ...
 
-<fio-autocomplete-field v-model="fio" :load-using="fetch" />
+<fio-autocomplete-field
+  v-model="fio" 
+  :load-using="fetch"
+/>
 
 ```
 
@@ -66,9 +73,7 @@ You can find [list of SCSS variables here](https://github.com/qubeekio/vue-fio-a
 ```
 
 ## Estimated response from the server
-
-Currently, this package does not support specifying the key by which the list of suggestions will be selected.
-
+--
 ```json
 {
   "suggestions": [
@@ -87,7 +92,6 @@ Currently, this package does not support specifying the key by which the list of
   ]
 }
 ```
-
 
 ## License
 

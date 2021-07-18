@@ -464,10 +464,9 @@ function _nonIterableRest() {
         query: this.stepValue.trim(),
         gender: this.data.gender,
         parts: [step ? step.toUpperCase() : this.hasData ? 'PATRONYMIC' : 'SURNAME']
-      }).then(function (_ref3) {
-        var data = _ref3.data;
+      }).then(function (data) {
         _this3.selectedIndex = null;
-        _this3.suggestions = data.suggestions;
+        _this3.suggestions = data;
 
         _this3.$forceUpdate();
       }) : null;
@@ -601,7 +600,7 @@ var __vue_inject_styles__ = undefined;
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-564636f0";
+var __vue_module_identifier__ = "data-v-7f647a8b";
 /* functional template */
 
 var __vue_is_functional_template__ = false;

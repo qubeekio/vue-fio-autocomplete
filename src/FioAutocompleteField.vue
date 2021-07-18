@@ -430,9 +430,9 @@ export default {
                 ? 'PATRONYMIC'
                 : 'SURNAME'
             ]
-          }).then(({ data }) => {
+          }).then((data) => {
             this.selectedIndex = null
-            this.suggestions = data.suggestions
+            this.suggestions = data
             this.$forceUpdate()
           })
         : null

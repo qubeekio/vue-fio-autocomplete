@@ -1,6 +1,6 @@
 {
   "name": "@qubeekio/vue-fio-autocomplete",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Simple and lightweight package, that helps with russian fio",
   "repository": "https://github.com/qubeekio/vue-fio-autocomplete",
   "scripts": {
@@ -11,6 +11,7 @@
     "build:ssr": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format cjs",
     "build:unpkg": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format iife"
   },
+  "keywords": ["vue", "fio", "russian", "dadata", "autocomplete", "helper"],
   "main": "dist/fio-autocomplete.ssr.js",
   "module": "dist/fio-autocomplete.esm.js",
   "browser": "dist/fio-autocomplete.esm.js",

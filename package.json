@@ -1,6 +1,6 @@
 {
   "name": "@qubeekio/vue-fio-autocomplete",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Simple and lightweight package, that helps with russian fio",
   "repository": "https://github.com/qubeekio/vue-fio-autocomplete",
   "scripts": {

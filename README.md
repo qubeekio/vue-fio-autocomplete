@@ -59,7 +59,7 @@ fio: {
 
 The component includes SCSS. 
 
-You can find [list of SCSS variables here](https://github.com/qubeekio/vue-fio-autocomplete/blob/master/src/styles/main.scss).
+You can find [list of SCSS variables here](https://github.com/qubeekio/vue-fio-autocomplete/blob/master/styles/main.scss).
 
 ```scss
 @import "@qubeekio/vue-fio-autocomplete/styles/main.scss";

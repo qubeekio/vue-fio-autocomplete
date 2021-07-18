@@ -232,9 +232,12 @@ var script = {
     predictStep({
       target
     }, offset = 0) {
-      // When user pressed right arrow with empty space
-      if (offset === 1 && !this.stepValue) return;
-      if (offset === 1 && this.inputValue === this.prefixValue) this.inputValue += ' ';
+      // When user pressed right arrow with empty space.
+      if (offset === 1) {
+        this.inputValue += ' ';
+        this.selectedIndex = null;
+      }
+
       if (target.selectionStart === target.selectionEnd) this.caretPosition = target.selectionStart + offset;
       const [surname, name] = target.value.split(' ', 2);
       const surnameLength = surname ? surname.length : 0;

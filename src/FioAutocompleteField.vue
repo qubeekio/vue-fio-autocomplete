@@ -294,11 +294,11 @@ export default {
       })
     },
     predictStep({ target }, offset = 0) {
-      // When user pressed right arrow with empty space
-      if (offset === 1 && !this.stepValue) return
-
-      if (offset === 1 && this.inputValue === this.prefixValue)
+      // When user pressed right arrow with empty space.
+      if (offset === 1) {
         this.inputValue += ' '
+        this.selectedIndex = null
+      }
 
       if (target.selectionStart === target.selectionEnd)
         this.caretPosition = target.selectionStart + offset

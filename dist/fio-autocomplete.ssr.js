@@ -351,9 +351,13 @@ function _nonIterableRest() {
     predictStep: function predictStep(_ref) {
       var target = _ref.target;
       var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-      // When user pressed right arrow with empty space
-      if (offset === 1 && !this.stepValue) return;
-      if (offset === 1 && this.inputValue === this.prefixValue) this.inputValue += ' ';
+
+      // When user pressed right arrow with empty space.
+      if (offset === 1) {
+        this.inputValue += ' ';
+        this.selectedIndex = null;
+      }
+
       if (target.selectionStart === target.selectionEnd) this.caretPosition = target.selectionStart + offset;
 
       var _target$value$split = target.value.split(' ', 2),
@@ -600,7 +604,7 @@ var __vue_inject_styles__ = undefined;
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-7f647a8b";
+var __vue_module_identifier__ = "data-v-1d573a20";
 /* functional template */
 
 var __vue_is_functional_template__ = false;

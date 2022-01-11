@@ -212,7 +212,7 @@ var script = {
 
         this.suggestions = []; // Predict new step.
 
-        this.predictStep(e, 1); // Load only if we have only one part in patronymic.
+        this.predictStep(e, 2); // Load only if we have only one part in patronymic.
 
         if (this.stepName !== 'patronymic' && this.stepValue && !this.stepValue.endsWith(' ')) this.loadSuggestions();
       }
@@ -242,7 +242,18 @@ var script = {
       const [surname, name] = target.value.split(' ', 2);
       const surnameLength = surname ? surname.length : 0;
       const nameLength = name ? name.length : 0;
-      if (this.caretPosition >= 0 && this.caretPosition <= surnameLength) this.predictedStep = 1;else if (this.caretPosition >= surnameLength && this.caretPosition <= surnameLength + nameLength + 1) this.predictedStep = 2;else this.predictedStep = 3;
+
+      if (this.caretPosition >= 0 && this.caretPosition <= surnameLength) {
+        this.predictedStep = 1;
+        return;
+      }
+
+      if (this.caretPosition >= surnameLength && this.caretPosition <= surnameLength + nameLength + 1) {
+        this.predictedStep = 2;
+        return;
+      }
+
+      this.predictedStep = 3;
     },
 
     restoreOriginalValue() {
@@ -325,7 +336,7 @@ var script = {
 
       this.suggestions = []; // Insert dummy space.
 
-      this.inputValue += ' '; // Predict new step.
+      this.inputValue = this.inputValue.toLowerCase() + ' '; // Predict new step.
 
       this.predictStep({
         target: this.$refs.input

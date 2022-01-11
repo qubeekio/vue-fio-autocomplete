@@ -256,7 +256,7 @@ function _nonIterableRest() {
       this.suggestions = [];
     },
     fioParts: function fioParts() {
-      if (this.fioParts.length <= 1) {
+      if (this.fioParts.length <= 2) {
         this.data.gender = null;
       }
 
@@ -343,7 +343,12 @@ function _nonIterableRest() {
     afterFocus: function afterFocus() {
       var _this = this;
 
-      this.focused = false;
+      this.focused = false; // If suggestion is the same as value - add gender.
+
+      if (this.suggestions.length > 0 && this.suggestions[0].value === this.stepValue) {
+        this.setGender(this.suggestions[0].data.gender);
+      }
+
       this.$nextTick(function () {
         _this.$emit('input', _this.data);
       });
@@ -615,7 +620,7 @@ var __vue_inject_styles__ = undefined;
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-40cc15d2";
+var __vue_module_identifier__ = "data-v-4652f0e1";
 /* functional template */
 
 var __vue_is_functional_template__ = false;

@@ -192,7 +192,7 @@ export default {
       this.suggestions = []
     },
     fioParts() {
-      if (this.fioParts.length <= 1) {
+      if (this.fioParts.length <= 2) {
         this.data.gender = null
       }
       let filtered = this.fioParts.filter(Boolean)
@@ -289,6 +289,15 @@ export default {
     },
     afterFocus() {
       this.focused = false
+
+      // If suggestion is the same as value - add gender.
+      if (
+        this.suggestions.length > 0 &&
+        this.suggestions[0].value === this.stepValue
+      ) {
+        this.setGender(this.suggestions[0].data.gender)
+      }
+
       this.$nextTick(() => {
         this.$emit('input', this.data)
       })
